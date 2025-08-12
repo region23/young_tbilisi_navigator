@@ -432,6 +432,38 @@ a.btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(103, 86, 140, 0.3);
 }
+
+/* Icon-only buttons */
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 10px;
+}
+
+.btn-icon i { font-size: 16px; }
+
+/* Brand color accents per network (subtle) */
+.btn-icon.icon-site { border-color: var(--accent3); color: var(--accent3); }
+.btn-icon.icon-map { border-color: var(--accent2); color: var(--accent2); }
+.btn-icon.icon-facebook { border-color: #1877f2; color: #1877f2; }
+.btn-icon.icon-instagram { border-color: #e1306c; color: #e1306c; }
+.btn-icon.icon-telegram { border-color: #229ed9; color: #229ed9; }
+.btn-icon.icon-youtube { border-color: #ff0000; color: #ff0000; }
+.btn-icon.icon-tiktok { border-color: #010101; color: #ffffff; background: #010101; }
+.btn-icon.icon-discord { border-color: #5865f2; color: #5865f2; }
+.btn-icon.icon-whatsapp { border-color: #25d366; color: #25d366; }
+.btn-icon.icon-meetup { border-color: #f64060; color: #f64060; }
+
+.btn-icon:hover {
+  background: transparent;
+  color: inherit;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(103, 86, 140, 0.3);
+}
 .like {
   cursor: pointer;
   border: none;

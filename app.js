@@ -111,7 +111,7 @@ function render(){
 function renderLinks(links){
   if(!links) return '';
   const entries = Object.entries(links);
-  return entries.map(([k,v])=>`<a class="btn" href="${v}" target="_blank" rel="noopener">${labelFor(k)}</a>`).join('');
+  return entries.map(([k,v])=>iconButtonHtml(k, v)).join('');
 }
 
 function renderLanguages(languages) {
@@ -121,8 +121,46 @@ function renderLanguages(languages) {
   return languages.map(lang => `<span class="language-badge">${langEmojis[lang] || ''} ${langNames[lang] || lang}</span>`).join('');
 }
 function labelFor(k){
-  const map = {site:'Сайт', about:'Подробнее', map:'Карта', discord:'Discord', facebook:'Facebook', list:'Список', meetup:'Meetup'};
+  const map = {
+    site:'Открыть сайт',
+    about:'Подробнее',
+    map:'Открыть карту',
+    discord:'Discord',
+    facebook:'Facebook',
+    instagram:'Instagram',
+    telegram:'Telegram',
+    youtube:'YouTube',
+    tiktok:'TikTok',
+    whatsapp:'WhatsApp',
+    list:'Список',
+    meetup:'Meetup'
+  };
   return map[k] || 'Открыть';
+}
+
+function iconFor(k){
+  const map = {
+    site:'fa-solid fa-globe',
+    about:'fa-solid fa-circle-info',
+    map:'fa-solid fa-map-location-dot',
+    discord:'fa-brands fa-discord',
+    facebook:'fa-brands fa-facebook',
+    instagram:'fa-brands fa-instagram',
+    telegram:'fa-brands fa-telegram',
+    youtube:'fa-brands fa-youtube',
+    tiktok:'fa-brands fa-tiktok',
+    whatsapp:'fa-brands fa-whatsapp',
+    list:'fa-solid fa-list',
+    meetup:'fa-brands fa-meetup'
+  };
+  return map[k] || 'fa-solid fa-up-right-from-square';
+}
+
+function iconButtonHtml(key, url){
+  const title = labelFor(key);
+  const icon = iconFor(key);
+  const typeClass = `icon-${key}`;
+  return `<a class="btn btn-icon ${typeClass}" href="${url}" target="_blank" rel="noopener" title="${title}"><i class="${icon}"></i></a>`;
 }
 
 function getFilters(){
