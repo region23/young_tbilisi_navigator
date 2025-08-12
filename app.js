@@ -1,6 +1,6 @@
 
 let ITEMS = [];
-let map, vectorSource, userPos = null;
+let map, clusterer, userPos = null;
 let favoritesFilterActive = false; // Track favorites filter state
 
 async function loadItems() {
@@ -9,57 +9,29 @@ async function loadItems() {
   // ensure only 13+
   ITEMS = data.filter(it => it.age && it.age.min <= 13);
   render();
-  setupMap();
+  
+  // Initialize map after Yandex API loads
+  ymaps.ready(setupMap);
 }
 
 function setupMap() {
-  // Создаём источник для маркеров
-  vectorSource = new ol.source.Vector();
-  
-  // Создаём слой для маркеров
-  const vectorLayer = new ol.layer.Vector({
-    source: vectorSource,
-    style: function(feature) {
-      const type = feature.get('type');
-      return new ol.style.Style({
-        image: new ol.style.Circle({
-          radius: 8,
-          fill: new ol.style.Fill({
-            color: type === 'online' ? '#3b82f6' : '#ff6e6c'
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#ffffff',
-            width: 2
-          })
-        })
-      });
-    }
+  // Инициализируем Яндекс.Карту
+  map = new ymaps.Map('map', {
+    center: [41.715, 44.79], // Тбилиси [lat, lng]
+    zoom: 12,
+    controls: ['zoomControl', 'typeSelector', 'fullscreenControl']
   });
   
-  // Инициализируем карту
-  map = new ol.Map({
-    target: 'map',
-    layers: [
-      new ol.layer.Tile({
-        source: new ol.source.OSM()
-      }),
-      vectorLayer
-    ],
-    view: new ol.View({
-      center: ol.proj.fromLonLat([44.79, 41.715]), // Тбилиси [lng, lat]
-      zoom: 12
-    })
+  // Создаем кластеризатор для маркеров
+  clusterer = new ymaps.Clusterer({
+    preset: 'islands#invertedVioletClusterIcons',
+    groupByCoordinates: false,
+    clusterDisableClickZoom: false,
+    clusterHideIconOnBalloonOpen: false,
+    geoObjectHideIconOnBalloonOpen: false
   });
   
-  // Добавляем обработчик клика по маркерам
-  map.on('click', function(event) {
-    map.forEachFeatureAtPixel(event.pixel, function(feature) {
-      const item = feature.get('item');
-      if (item) {
-        showPopup(item, event.coordinate);
-      }
-    });
-  });
+  map.geoObjects.add(clusterer);
   
   refreshPins(getFilters());
 }
@@ -197,22 +169,53 @@ function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages}){
 }
 
 function refreshPins(filters, items = null) {
-  if (!map || !vectorSource) return;
+  if (!map || !clusterer) return;
   
-  vectorSource.clear();
+  clusterer.removeAll();
   const list = items || applyFilters(filters);
+  
+  const placemarks = [];
   
   list.forEach(it => {
     if (!it.coords) return;
     
-    const feature = new ol.Feature({
-      geometry: new ol.geom.Point(ol.proj.fromLonLat([it.coords.lng, it.coords.lat])),
-      type: it.type,
-      item: it
-    });
+    const iconColor = it.type === 'online' ? '#3b82f6' : '#ff6e6c';
+    const iconPreset = it.type === 'online' ? 'islands#blueCircleIcon' : 'islands#redCircleIcon';
     
-    vectorSource.addFeature(feature);
+    const placemark = new ymaps.Placemark(
+      [it.coords.lat, it.coords.lng],
+      {
+        balloonContentHeader: `<strong>${it.title}</strong>`,
+        balloonContentBody: `
+          <p>${it.blurb}</p>
+          <div style="margin: 8px 0;">
+            ${renderLanguages(it.languages)}
+            <span class="badge ${it.type === 'online' ? 'badge-online' : 'badge-offline'}">
+              ${it.type === 'online' ? '🌐 Онлайн' : '📍 Оффлайн'}
+            </span>
+          </div>
+          <div style="margin: 4px 0; color: #666;">
+            ${it.address || 'Онлайн-формат'}
+          </div>
+          <div style="margin: 8px 0;">
+            ${renderLinks(it.links)}
+          </div>
+          <div style="font-size: 12px; color: #888;">
+            ${(it.categories || []).map(c => `#${c}`).join(' ')}
+          </div>
+        `,
+        item: it
+      },
+      {
+        preset: iconPreset,
+        iconColor: iconColor
+      }
+    );
+    
+    placemarks.push(placemark);
   });
+  
+  clusterer.add(placemarks);
 }
 
 function getLikedIds() {
@@ -335,8 +338,7 @@ document.getElementById('geoBtn').addEventListener('click', (e)=>{
     showNotification('📍 Локация определена!');
     render();
     if (map) {
-      map.getView().setCenter(ol.proj.fromLonLat([userPos.lng, userPos.lat]));
-      map.getView().setZoom(14);
+      map.setCenter([userPos.lat, userPos.lng], 14);
     }
   }, err=>{
     btn.classList.remove('loading');
@@ -394,78 +396,21 @@ setTimeout(() => {
 }, 200);
 
 
-function showPopup(item, coordinate) {
-  // Создаём элемент popup
-  const popup = document.createElement("div");
-  popup.className = "map-popup";
-  popup.innerHTML = `
-    <div class="popup-header">
-      <strong>${item.title}</strong>
-      <button class="popup-close">&times;</button>
-    </div>
-    <div class="popup-content">
-      <p>${item.blurb}</p>
-      <div class="popup-badges">
-        ${renderLanguages(item.languages)}
-        <span class="badge ${item.type === "online" ? "badge-online" : "badge-offline"}">
-          ${item.type === "online" ? "🌐 Онлайн" : "📍 Оффлайн"}
-        </span>
-      </div>
-      <div class="popup-address">
-        ${item.address || "Онлайн-формат"}
-      </div>
-      <div class="popup-actions">
-        ${renderLinks(item.links)}
-      </div>
-      <div class="popup-tags">
-        ${(item.categories || []).map(c => `#${c}`).join(" ")}
-      </div>
-    </div>
-  `;
-  
-  // Удаляем предыдущий popup если есть
-  const existingPopup = document.querySelector(".map-popup");
-  if (existingPopup) {
-    existingPopup.remove();
-  }
-  
-  // Добавляем popup к карте
-  const mapContainer = document.getElementById("map");
-  mapContainer.appendChild(popup);
-  
-  // Позиционируем popup
-  const pixel = map.getPixelFromCoordinate(coordinate);
-  popup.style.left = (pixel[0] + 10) + "px";
-  popup.style.top = (pixel[1] - popup.offsetHeight - 10) + "px";
-  
-  // Обработчик закрытия
-  popup.querySelector(".popup-close").onclick = () => popup.remove();
-  
-  // Закрытие при клике вне popup
-  setTimeout(() => {
-    document.addEventListener("click", function closePopup(e) {
-      if (!popup.contains(e.target)) {
-        popup.remove();
-        document.removeEventListener("click", closePopup);
-      }
-    });
-  }, 100);
-}
-
 function showItemOnMap(item) {
   if (!item.coords || !map) return;
   
-  const coordinate = ol.proj.fromLonLat([item.coords.lng, item.coords.lat]);
-  
-  // Центрируем карту на точке
-  map.getView().animate({
-    center: coordinate,
-    zoom: 16,
+  // Центрируем карту на точке с анимацией
+  map.setCenter([item.coords.lat, item.coords.lng], 16, {
     duration: 800
   });
   
-  // Показываем popup после анимации
+  // Находим соответствующий маркер и открываем его балун
   setTimeout(() => {
-    showPopup(item, coordinate);
+    clusterer.each((placemark) => {
+      if (placemark.properties.get('item') && placemark.properties.get('item').id === item.id) {
+        placemark.balloon.open();
+        return false; // прерываем цикл
+      }
+    });
   }, 400);
 }
