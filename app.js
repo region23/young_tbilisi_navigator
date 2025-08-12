@@ -2,6 +2,33 @@
 let ITEMS = [];
 let map, clusterer, userPos = null;
 let favoritesFilterActive = false; // Track favorites filter state
+const THEME_KEY = 'theme';
+
+function applyTheme(theme) {
+  const safeTheme = theme === 'light' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', safeTheme);
+  const toggle = document.getElementById('themeToggle');
+  if (toggle) toggle.checked = safeTheme === 'light';
+}
+
+function initTheme() {
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    const theme = saved || (prefersLight ? 'light' : 'dark');
+    applyTheme(theme);
+  } catch (_) {
+    applyTheme('dark');
+  }
+  const themeToggleEl = document.getElementById('themeToggle');
+  if (themeToggleEl) {
+    themeToggleEl.addEventListener('change', (e) => {
+      const theme = e.target.checked ? 'light' : 'dark';
+      applyTheme(theme);
+      try { localStorage.setItem(THEME_KEY, theme); } catch (_) {}
+    });
+  }
+}
 
 async function loadItems() {
   const res = await fetch('data/items.json');
@@ -438,6 +465,9 @@ setTimeout(() => {
   updateFavoritesCounter();
   initializeFavoritesButton();
 }, 200);
+
+// Initialize theme as soon as possible
+document.addEventListener('DOMContentLoaded', initTheme);
 
 
 function showItemOnMap(item) {

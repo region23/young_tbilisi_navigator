@@ -12,6 +12,21 @@
   --border: #2a2741;
   --shadow: rgba(103, 86, 140, 0.3);
 }
+
+/* Light theme overrides */
+:root[data-theme="light"] {
+  --bg: #f7f7fb;
+  --bg-gradient: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+  --card: #ffffff;
+  --card-hover: #f3f4f8;
+  --text: #111827;
+  --text-muted: #4b5563;
+  --accent: #ef4444;
+  --accent2: #6366f1;
+  --accent3: #ca8a04;
+  --border: #e5e7eb;
+  --shadow: rgba(99, 102, 241, 0.15);
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -44,6 +59,14 @@ header {
   margin: 0 auto;
   text-align: center;
   position: relative;
+}
+
+/* Theme toggle positioning in header */
+.theme-toggle {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 2;
 }
 
 h1 {
@@ -594,6 +617,23 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(24px);
   background: var(--bg);
+}
+
+/* Moon/Sun icons inside the toggle using pseudo-elements */
+.switch-theme .slider:after {
+  content: '🌙';
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.switch-theme input:checked + .slider:after {
+  content: '🌞';
+  left: 6px;
+  right: auto;
 }
 /* Responsive Design */
 @media (max-width: 1000px) {
