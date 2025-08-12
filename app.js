@@ -54,7 +54,10 @@ function render(){
   const onlineLabelEl = document.querySelector('.switch-label');
   if (onlineLabelEl) onlineLabelEl.classList.toggle('on', filters.onlineOnly);
   const items = applyFilters(filters);
-  list.innerHTML = '';
+  list.innerHTML = `<div class="list-meta" id="listMeta"></div>`;
+  const metaEl = document.getElementById('listMeta');
+  if (metaEl) metaEl.textContent = `Показано ${items.length} из ${ITEMS.length}`;
+  console.log(`Rendered ${items.length} of ${ITEMS.length}`);
   
   // Add animation delay for cards
   let animationDelay = 0;
@@ -105,6 +108,8 @@ function render(){
     list.appendChild(div);
   });
   refreshPins(filters, items);
+  // Обновляем счётчик с учётом возможного скрытия карточек поиском
+  updateListMetaVisible();
   hideLoadingAnimation();
 }
 
@@ -423,6 +428,7 @@ function filterBySearch(searchTerm) {
       card.style.display = 'none';
     }
   });
+  updateListMetaVisible();
 }
 
 // Initialize
@@ -451,4 +457,12 @@ function showItemOnMap(item) {
       }
     });
   }, 400);
+}
+
+function updateListMetaVisible() {
+  const metaEl = document.getElementById('listMeta');
+  if (!metaEl) return;
+  const all = ITEMS.length;
+  const visible = [...document.querySelectorAll('#list .card')].filter(el => el.style.display !== 'none').length;
+  metaEl.textContent = `Показано ${visible} из ${all}`;
 }
