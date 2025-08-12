@@ -824,58 +824,96 @@ input:checked + .slider:before {
   opacity: 0;
 }
 
-/* Yandex Maps Balloon Styles */
-.ymaps-2-1-79-balloon__content .badge {
-  display: inline-block;
-  padding: 2px 6px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 600;
-  margin-right: 4px;
-}
-
-.ymaps-2-1-79-balloon__content .badge-online {
-  background: rgba(103, 86, 140, 0.2);
-  border: 1px solid #67568c;
-  color: #67568c;
-}
-
-.ymaps-2-1-79-balloon__content .badge-offline {
-  background: rgba(255, 110, 108, 0.1);
-  border: 1px solid #ff6e6c;
-  color: #ff6e6c;
-}
-
-.ymaps-2-1-79-balloon__content .language-badge {
-  background: rgba(103, 86, 140, 0.15);
-  border: 1px solid rgba(103, 86, 140, 0.3);
-  color: #67568c;
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-size: 10px;
-  font-weight: 600;
-  white-space: nowrap;
-  display: inline-block;
-  margin-right: 4px;
-}
-
-.ymaps-2-1-79-balloon__content a.btn {
-  background: rgba(103, 86, 140, 0.1);
-  color: #67568c;
-  border: 2px solid #67568c;
-  padding: 4px 8px;
+/* Map Popup Styles */
+.map-popup {
+  position: absolute;
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 15px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 12px;
-  margin-right: 5px;
-  display: inline-block;
-  margin-top: 4px;
+  box-shadow: 0 10px 30px var(--shadow);
+  z-index: 1000;
+  max-width: 300px;
+  min-width: 250px;
 }
 
-.ymaps-2-1-79-balloon__content a.btn:hover {
-  background: #67568c;
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   color: white;
+  border-radius: 15px 15px 0 0;
+}
+
+.popup-header strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.popup-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.popup-close:hover {
+  opacity: 1;
+}
+
+.popup-content {
+  padding: 12px 15px;
+}
+
+.popup-content p {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.popup-badges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.popup-badges .badge,
+.popup-badges .language-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+}
+
+.popup-address {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin: 8px 0;
+}
+
+.popup-actions {
+  margin: 10px 0;
+}
+
+.popup-actions .btn {
+  font-size: 11px;
+  padding: 4px 8px;
+  margin-right: 5px;
+  margin-top: 4px;
+  display: inline-block;
+}
+
+.popup-tags {
+  color: var(--text-muted);
+  font-size: 11px;
+  margin-top: 8px;
 }
 
 /* Empty state for list */

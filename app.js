@@ -1,6 +1,6 @@
 
 let ITEMS = [];
-let map, clusterer, userPos = null;
+let map, vectorSource, userPos = null;
 let favoritesFilterActive = false; // Track favorites filter state
 
 async function loadItems() {
@@ -13,27 +13,55 @@ async function loadItems() {
 }
 
 function setupMap() {
-  ymaps.ready(init);
+  // Создаём источник для маркеров
+  vectorSource = new ol.source.Vector();
   
-  function init() {
-    map = new ymaps.Map('map', {
-      center: [41.715, 44.79], // Центр Тбилиси
-      zoom: 12,
-      controls: ['zoomControl', 'searchControl', 'typeSelector', 'fullscreenControl']
+  // Создаём слой для маркеров
+  const vectorLayer = new ol.layer.Vector({
+    source: vectorSource,
+    style: function(feature) {
+      const type = feature.get('type');
+      return new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: 8,
+          fill: new ol.style.Fill({
+            color: type === 'online' ? '#3b82f6' : '#ff6e6c'
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#ffffff',
+            width: 2
+          })
+        })
+      });
+    }
+  });
+  
+  // Инициализируем карту
+  map = new ol.Map({
+    target: 'map',
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM()
+      }),
+      vectorLayer
+    ],
+    view: new ol.View({
+      center: ol.proj.fromLonLat([44.79, 41.715]), // Тбилиси [lng, lat]
+      zoom: 12
+    })
+  });
+  
+  // Добавляем обработчик клика по маркерам
+  map.on('click', function(event) {
+    map.forEachFeatureAtPixel(event.pixel, function(feature) {
+      const item = feature.get('item');
+      if (item) {
+        showPopup(item, event.coordinate);
+      }
     });
-    
-    // Создаём кластеризатор для группировки близких меток
-    clusterer = new ymaps.Clusterer({
-      preset: 'islands#invertedVioletClusterIcons',
-      groupByCoordinates: false,
-      clusterDisableClickZoom: false,
-      clusterHideIconOnBalloonOpen: false,
-      geoObjectHideIconOnBalloonOpen: false
-    });
-    
-    map.geoObjects.add(clusterer);
-    refreshPins(getFilters());
-  }
+  });
+  
+  refreshPins(getFilters());
 }
 
 function getDistanceKm(a, b){
@@ -89,10 +117,19 @@ function render(){
       </div>
     `;
     div.querySelector('.like').onclick = (e) => {
+      e.stopPropagation();
       toggleLike(it.id);
       e.target.classList.toggle('liked');
       e.target.textContent = e.target.classList.contains('liked') ? '♥' : '♡';
     };
+    
+    // Add click handler to show location on map
+    div.onclick = () => {
+      if (it.coords) {
+        showItemOnMap(it);
+      }
+    };
+    
     list.appendChild(div);
   });
   refreshPins(filters, items);
@@ -160,44 +197,21 @@ function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages}){
 }
 
 function refreshPins(filters, items = null) {
-  if (!map || !clusterer) return;
+  if (!map || !vectorSource) return;
   
-  clusterer.removeAll();
+  vectorSource.clear();
   const list = items || applyFilters(filters);
   
   list.forEach(it => {
     if (!it.coords) return;
     
-    const placemark = new ymaps.Placemark(
-      [it.coords.lat, it.coords.lng],
-      {
-        balloonContentHeader: `<strong>${it.title}</strong>`,
-        balloonContentBody: `
-          <div style="padding: 10px;">
-            <p style="margin: 5px 0;">${it.blurb}</p>
-            <div style="margin: 8px 0;">
-              ${renderLanguages(it.languages)}
-              <span class="badge ${it.type === 'online' ? 'badge-online' : 'badge-offline'}" style="margin-left: 5px;">
-                ${it.type === 'online' ? '🌐 Онлайн' : '📍 Оффлайн'}
-              </span>
-            </div>
-            <div style="color: #666; font-size: 14px; margin: 5px 0;">
-              ${it.address || 'Онлайн-формат'}
-            </div>
-            <div style="margin-top: 10px;">
-              ${renderLinks(it.links)}
-            </div>
-          </div>
-        `,
-        balloonContentFooter: `<small>${(it.categories || []).map(c => `#${c}`).join(' ')}</small>`
-      },
-      {
-        preset: it.type === 'online' ? 'islands#blueIcon' : 'islands#redIcon',
-        iconColor: it.type === 'online' ? '#3b82f6' : '#ff6e6c'
-      }
-    );
+    const feature = new ol.Feature({
+      geometry: new ol.geom.Point(ol.proj.fromLonLat([it.coords.lng, it.coords.lat])),
+      type: it.type,
+      item: it
+    });
     
-    clusterer.add(placemark);
+    vectorSource.addFeature(feature);
   });
 }
 
@@ -320,7 +334,10 @@ document.getElementById('geoBtn').addEventListener('click', (e)=>{
     btn.innerHTML = '<span>✓ Локация найдена</span>';
     showNotification('📍 Локация определена!');
     render();
-    if (map) map.setCenter([userPos.lat, userPos.lng], 14);
+    if (map) {
+      map.getView().setCenter(ol.proj.fromLonLat([userPos.lng, userPos.lat]));
+      map.getView().setZoom(14);
+    }
   }, err=>{
     btn.classList.remove('loading');
     btn.disabled = false;
@@ -375,3 +392,80 @@ setTimeout(() => {
   updateFavoritesCounter();
   initializeFavoritesButton();
 }, 200);
+
+
+function showPopup(item, coordinate) {
+  // Создаём элемент popup
+  const popup = document.createElement("div");
+  popup.className = "map-popup";
+  popup.innerHTML = `
+    <div class="popup-header">
+      <strong>${item.title}</strong>
+      <button class="popup-close">&times;</button>
+    </div>
+    <div class="popup-content">
+      <p>${item.blurb}</p>
+      <div class="popup-badges">
+        ${renderLanguages(item.languages)}
+        <span class="badge ${item.type === "online" ? "badge-online" : "badge-offline"}">
+          ${item.type === "online" ? "🌐 Онлайн" : "📍 Оффлайн"}
+        </span>
+      </div>
+      <div class="popup-address">
+        ${item.address || "Онлайн-формат"}
+      </div>
+      <div class="popup-actions">
+        ${renderLinks(item.links)}
+      </div>
+      <div class="popup-tags">
+        ${(item.categories || []).map(c => `#${c}`).join(" ")}
+      </div>
+    </div>
+  `;
+  
+  // Удаляем предыдущий popup если есть
+  const existingPopup = document.querySelector(".map-popup");
+  if (existingPopup) {
+    existingPopup.remove();
+  }
+  
+  // Добавляем popup к карте
+  const mapContainer = document.getElementById("map");
+  mapContainer.appendChild(popup);
+  
+  // Позиционируем popup
+  const pixel = map.getPixelFromCoordinate(coordinate);
+  popup.style.left = (pixel[0] + 10) + "px";
+  popup.style.top = (pixel[1] - popup.offsetHeight - 10) + "px";
+  
+  // Обработчик закрытия
+  popup.querySelector(".popup-close").onclick = () => popup.remove();
+  
+  // Закрытие при клике вне popup
+  setTimeout(() => {
+    document.addEventListener("click", function closePopup(e) {
+      if (!popup.contains(e.target)) {
+        popup.remove();
+        document.removeEventListener("click", closePopup);
+      }
+    });
+  }, 100);
+}
+
+function showItemOnMap(item) {
+  if (!item.coords || !map) return;
+  
+  const coordinate = ol.proj.fromLonLat([item.coords.lng, item.coords.lat]);
+  
+  // Центрируем карту на точке
+  map.getView().animate({
+    center: coordinate,
+    zoom: 16,
+    duration: 800
+  });
+  
+  // Показываем popup после анимации
+  setTimeout(() => {
+    showPopup(item, coordinate);
+  }, 400);
+}
