@@ -524,6 +524,15 @@ footer small {
 .footer-actions {
   margin-top: 8px;
 }
+
+/* Footer CTA chip should look like a proper button */
+.footer-actions a.chip {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
 /* Modern Toggle Switch */
 .switch {
   position: relative;
