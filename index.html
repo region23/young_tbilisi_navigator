@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Твой гид по Тбилиси | Секции и кружки для подростков 🚀</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="background-blur"></div>
+<header>
+  <div class="header-animation">
+    <span class="floating-emoji" style="--delay: 0s">🎮</span>
+    <span class="floating-emoji" style="--delay: 1s">🎨</span>
+    <span class="floating-emoji" style="--delay: 2s">⚽</span>
+    <span class="floating-emoji" style="--delay: 3s">🎭</span>
+    <span class="floating-emoji" style="--delay: 4s">💬</span>
+  </div>
+  <h1>Найди свою тусовку в Тбилиси</h1>
+  <p>Крутые секции, кружки и онлайн-сообщества для подростков 13-16 лет. Выбирай что нравится и сохраняй в избранное!</p>
+</header>
+
+<section id="filters">
+  <div class="filter-row">
+    <button id="geoBtn"><span>📍 Найти рядом</span></button>
+    <label class="switch">
+      <input type="checkbox" id="onlineToggle">
+      <span class="slider"></span>
+    </label>
+    <span class="switch-label" title="Показывать только онлайн">🌐 Онлайн</span>
+    <button class="chip favorites-chip" id="favoritesChip" title="Показать только избранное">
+      ♡ Избранное <span id="favoritesCount">(0)</span>
+    </button>
+    <div class="range-control">
+      <label>📏 Радиус: <span id="distLabel">весь город</span></label>
+      <input id="distance" type="range" min="0" max="15" step="1" value="0">
+    </div>
+  </div>
+  <div class="chips">
+    <button class="chip" data-tag="социум">🤝 Новые друзья</button>
+    <button class="chip" data-tag="спорт">⚡ Спорт и движение</button>
+    <button class="chip" data-tag="игры">🎮 Игры и киберспорт</button>
+    <button class="chip" data-tag="творчество">🎨 Творчество</button>
+    <button class="chip" data-tag="языки">💬 Языки</button>
+    <button class="chip" data-tag="программирование">💻 Кодинг</button>
+    <button class="chip" data-tag="танцы">🕺 Танцы</button>
+  </div>
+  <div class="filter-section">
+    <label class="filter-label">По языкам:</label>
+    <div class="chips">
+      <button class="chip" data-language="ru">🇷🇺 Русский</button>
+      <button class="chip" data-language="en">🇺🇸 English</button>
+      <button class="chip" data-language="ge">🇬🇪 ქართული</button>
+    </div>
+  </div>
+</section>
+
+<main>
+  <div id="map"></div>
+  <div id="list"></div>
+</main>
+
+<footer>
+  <small>Сделано с любовью для подростков Тбилиси • 2025</small>
+</footer>
+
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+<script src="app.js"></script>
+</body>
+</html>
