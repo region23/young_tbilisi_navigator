@@ -1,617 +1,1676 @@
 [
-    {
-      "id": "teen_talks",
-      "title": "Teen Talks Social Club",
-      "type": "offline",
-      "categories": [
-        "социум",
-        "общение",
-        "клуб"
-      ],
-      "age": {
-        "min": 13,
-        "max": 15
-      },
-      "address": "ул. Адама Мицкевича, 29, Тбилиси",
-      "coords": {
-        "lat": 41.724572,
-        "lng": 44.760185
-      },
-      "links": {
-        "about": "https://findschool.ge/sections/teentalks/"
-      },
-      "languages": ["en", "ru"],
-      "blurb": "Дискуссии, книжный клуб, игры, пикники. Дружелюбная среда подростков 13–15.",
-      "source_citations": [
-        "turn1search5",
-        "turn2search0"
-      ]
+  {
+    "id": "aqua_centre_fitness",
+    "title": "Aqua Centre and Fitness — плавание (Глдани)",
+    "type": "offline",
+    "categories": [
+      "здоровье",
+      "плавание",
+      "спорт"
+    ],
+    "age": {
+      "min": 5,
+      "max": 18
     },
-    {
-      "id": "ih_tbilisi",
-      "title": "International House Tbilisi — английский",
-      "type": "offline",
-      "categories": [
-        "языки",
-        "английский",
-        "общение"
-      ],
-      "age": {
-        "min": 13,
-        "max": 16
-      },
-      "address": "2, 26th May Square, Tbilisi",
-      "coords": {
-        "lat": 41.71753,
-        "lng": 44.77712
-      },
-      "links": {
-        "site": "https://ihtbilisi.ge/en/contact/"
-      },
-      "languages": ["en"],
-      "blurb": "Группы 13–16 лет, разговорная практика и подготовка к экзаменам.",
-      "source_citations": [
-        "turn0search6",
-        "turn0search2",
-        "turn0search18"
-      ]
+    "address": "ул. Керченская, 1, Тбилиси",
+    "coords": {
+      "lat": 41.787424,
+      "lng": 44.801031
     },
-    {
-      "id": "olympic_pool",
-      "title": "Olympic Pool — плавание",
-      "type": "offline",
-      "categories": [
-        "спорт",
-        "здоровье",
-        "плавание"
-      ],
-      "age": {
-        "min": 13,
-        "max": 18
-      },
-      "address": "Bob Walsh St, 21, Tbilisi",
-      "coords": {
-        "lat": 41.67375,
-        "lng": 44.84425
-      },
-      "links": {
-        "map": "https://yandex.com/maps/org/olympic_pool/93883809324/"
-      },
-      "languages": ["ge", "ru", "en"],
-      "blurb": "Большой бассейн, дорожки для тренировок и общеукрепляющих занятий.",
-      "source_citations": [
-        "turn0search11",
-        "turn0search15"
-      ]
+    "links": {
+      "facebook": "https://www.facebook.com/aquacentre.ge",
+      "instagram": "https://www.instagram.com/aquacentre_fitness/"
     },
-    {
-      "id": "gladius_bjj",
-      "title": "Gladius Brazilian Jiu‑Jitsu",
-      "type": "offline",
-      "categories": [
-        "спорт",
-        "боевые искусства",
-        "выносливость"
-      ],
-      "age": {
-        "min": 13,
-        "max": 18
-      },
-      "address": "ул. Мераба Костава, 6 (район Вера)",
-      "coords": {
-        "lat": 41.704932,
-        "lng": 44.789245
-      },
-      "links": {
-        "site": "https://jiu-jitsu.ge/"
-      },
-      "languages": ["en", "ge", "ru"],
-      "blurb": "BJJ для подростков: физподготовка, дисциплина и дружеская атмосфера.",
-      "source_citations": [
-        "turn0search5",
-        "turn0search13",
-        "turn5search3"
-      ]
+    "languages": [
+      "ru"
+    ],
+    "blurb": "Тренер по плаванию: обучение с нуля, улучшение техники, подготовка к соревнованиям, укрепление здоровья."
+  },
+  {
+    "id": "arena_swimming_pool",
+    "title": "Arena Swimming Pool",
+    "type": "offline",
+    "categories": [
+      "здоровье",
+      "плавание",
+      "спорт"
+    ],
+    "age": {
+      "min": 6,
+      "max": 18
     },
-    {
-      "id": "dinamo_academy",
-      "title": "Dinamo Academy — футбол (Лублиана, 62)",
-      "type": "offline",
-      "categories": [
-        "спорт",
-        "командные виды",
-        "футбол"
-      ],
-      "age": {
-        "min": 13,
-        "max": 17
-      },
-      "address": "ул. Лублианас, 62, Tbilisi",
-      "coords": {
-        "lat": 41.7486,
-        "lng": 44.7949
-      },
-      "links": {
-        "about": "https://yandex.eu/maps/org/dinamo_academy/214904825418/"
-      },
-      "languages": ["ge", "en"],
-      "blurb": "Тренировки в академии «Динамо Тбилиси». Девчачьи группы есть у клуба.",
-      "source_citations": [
-        "turn4search14",
-        "turn4search7",
-        "turn4search11"
-      ]
+    "address": "Тбилиси, №2 University str (Делиси)",
+    "coords": null,
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/arenasp/",
+      "site": "https://arenasport.ge",
+      "facebook": "https://www.facebook.com/arenasportcomplex/"
     },
-    {
-      "id": "real_talk",
-      "title": "REAL TALK — английский соцклуб",
-      "type": "offline",
-      "categories": [
-        "социум",
-        "английский",
-        "игры"
-      ],
-      "age": {
-        "min": 13,
-        "max": 18
-      },
-      "address": "локации меняются (центральные районы)",
-      "coords": null,
-      "links": {
-        "meetup": "https://www.meetup.com/real-talk-tbilisi/"
-      },
-      "languages": ["en"],
-      "blurb": "Живые встречи: разговорные игры, новые друзья. Можно прийти с родителем в первый раз.",
-      "source_citations": [
-        "turn1search1",
-        "turn1search3",
-        "turn1search4"
-      ]
+    "blurb": "Бассейн 25×15×2 м. Требуется медсправка при первом визите; ежедневно 07:00–17:00."
+  },
+  {
+    "id": "art_bina",
+    "title": "ART BINA — студия творчества",
+    "type": "offline",
+    "categories": [
+      "искусство",
+      "студия",
+      "творчество"
+    ],
+    "age": {
+      "min": 5,
+      "max": 18
     },
-    {
-      "id": "roblox_tbilisi_hood",
-      "title": "Roblox: Tbilisi Hood (Discord)",
-      "type": "online",
-      "categories": [
-        "игры",
-        "roblox",
-        "сообщество"
-      ],
-      "languages": ["ge", "ru"],
-      "age": {
-        "min": 13,
-        "max": 18
-      },
-      "address": "Онлайн",
-      "coords": null,
-      "links": {
-        "discord": "https://discord.do/tbilisi-hood/"
-      },
-      "blurb": "Локальное сообщество вокруг игры «Tbilisi Hood» в Roblox.",
-      "source_citations": [
-        "turn3search0"
-      ]
+    "address": "Тбилиси, Navtlughi 10, корп.3, кв.9",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/artbina/"
     },
-    {
-      "id": "roblox_georgian_fb",
-      "title": "Roblox Georgian Community (Facebook)",
-      "type": "online",
-      "categories": [
-        "игры",
-        "roblox",
-        "сообщество"
-      ],
-      "languages": ["ge", "ru"],
-      "age": {
-        "min": 13,
-        "max": 18
-      },
-      "address": "Онлайн",
-      "coords": null,
-      "links": {
-        "facebook": "https://www.facebook.com/groups/RobloxGeorgian/"
-      },
-      "blurb": "Грузинское сообщество Roblox: новости, чат, ссылки на Discord.",
-      "source_citations": [
-        "turn3search8"
-      ]
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "blurb": "Занятия для детей и взрослых в районе Исани."
+  },
+  {
+    "id": "art_boom",
+    "age": {
+      "min": 3,
+      "max": 18
     },
-    {
-      "id": "minecraft_ge_servers",
-      "title": "Minecraft сервера в Грузии (MINEVALS и др.)",
-      "type": "online",
-      "categories": [
-        "игры",
-        "minecraft",
-        "сообщество"
-      ],
-      "languages": ["ge", "ru", "en"],
-      "age": {
-        "min": 13,
-        "max": 18
-      },
-      "address": "Онлайн",
-      "coords": null,
-      "links": {
-        "list": "https://minecraft-mp.com/country/georgia/"
-      },
-      "blurb": "Подборка локальных серверов (например, wonderlands.ge:55750).",
-      "source_citations": [
-        "turn3search10"
-      ]
+    "address": "Тбилиси, ул. Атени, 2/5",
+    "coords": {
+      "lat": 41.710007,
+      "lng": 44.772312
     },
-    {
-      "id": "azbuka_culture_center",
-      "title": "Центр \"Азбука\" — русский язык и кружки",
-      "type": "offline",
-      "categories": ["языки", "русский", "социум", "творчество"],
-      "age": { "min": 12, "max": 18 },
-      "address": "ул. Бесики, 4, Тбилиси",
-      "coords": { "lat": 41.688895, "lng": 44.772052 },
-      "links": {
-        "site": "https://azbuka.ge",
-        "about": "https://azbuka.ge/yazykovye-kursy.html"
-      },
-      "languages": ["ru"],
-      "blurb": "Курсы и мероприятия для подростков, мастер‑классы и языковые программы.",
-      "source_citations": ["info.md[217-224]", "info.md[50-52]"]
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/artboom/",
+      "site": "https://artboom.ge",
+      "facebook": "https://www.facebook.com/artboomstudio/",
+      "instagram": "https://www.instagram.com/artboom.ge/"
     },
-    {
-      "id": "pik_tbilisi",
-      "title": "Подростковый интеллектуальный клуб «Пик Тбилиси»",
-      "type": "offline",
-      "categories": ["социум", "интеллект", "игры"],
-      "age": { "min": 12, "max": 16 },
-      "address": "Тбилиси, локации меняются",
-      "coords": null,
-      "links": {
-        "site": "https://pikclub.com",
-        "about": "https://findschool.ge/sections/pikclub/"
-      },
-      "languages": ["ru"],
-      "blurb": "Еженедельные встречи для подростков 12–16: интеллектуальные игры и общение.",
-      "source_citations": ["info.md[201-213]", "info.md[268-271]"]
+    "blurb": "Детская театральная студия с танцевальными классами (в том числе хип-хоп) и художественными курсами.",
+    "title": "Art Boom — театральная и танцевальная студия",
+    "type": "offline",
+    "categories": [
+      "танцы",
+      "творчество",
+      "театр"
+    ]
+  },
+  {
+    "id": "art_east",
+    "title": "Art East — художественная школа",
+    "type": "offline",
+    "categories": [
+      "искусство",
+      "рисование",
+      "творчество"
+    ],
+    "age": {
+      "min": 4,
+      "max": 18
     },
-    {
-      "id": "teenergizer_tbilisi",
-      "title": "Teenergizer — международная организация для подростков",
-      "type": "online",
-      "categories": ["социум", "поддержка", "сообщество"],
-      "age": { "min": 12, "max": 19 },
-      "address": "Онлайн и Тбилиси",
-      "coords": null,
-      "links": {
-        "about": "https://teenergizer.org/ru/about/"
-      },
-      "languages": ["ru", "ge", "en"],
-      "blurb": "Сообщество подростков, офис в Тбилиси, мероприятия и поддержка.",
-      "source_citations": ["info.md[226-229]", "info.md[274-277]"]
+    "address": "Тбилиси, ул. Ахвледиани, 15",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/arteast/"
     },
-    {
-      "id": "volunteers_tbilisi",
-      "title": "Volunteers Tbilisi — волонтёрские мероприятия",
-      "type": "offline",
-      "categories": ["социум", "волонтерство", "мероприятия"],
-      "age": { "min": 12, "max": 18 },
-      "address": "Тбилиси, разные локации",
-      "coords": null,
-      "links": {
-        "about": "https://t.me/s/volunteerstbilisi"
-      },
-      "languages": ["ru"],
-      "blurb": "Квесты, мастер‑классы и социальные проекты для подростков 12+.",
-      "source_citations": ["info.md[230-234]", "info.md[276-277]"]
+    "languages": [
+      "ge"
+    ],
+    "blurb": "Школа‑студия: рисование и выезды на экскурсии."
+  },
+  {
+    "id": "auditoria_booksbar",
+    "age": {
+      "min": 6,
+      "max": 14
     },
-    {
-      "id": "emcan_english",
-      "title": "EMCAN English Training Center — разговорные клубы",
-      "type": "offline",
-      "categories": ["языки", "английский", "социум"],
-      "age": { "min": 12, "max": 15 },
-      "address": "ул. Тараса Шевченко, 10, Тбилиси",
-      "coords": null,
-      "links": {
-        "site": "https://www.emcaned.ge/english/"
-      },
-      "languages": ["en", "ge", "ru"],
-      "blurb": "Разговорные клубы и подготовка к экзаменам для подростков 12–15.",
-      "source_citations": ["info.md[171-173]", "info.md[180-186]"]
+    "address": "Тбилиси, ул. Симона Джанашия, 26",
+    "coords": {
+      "lat": 41.705773,
+      "lng": 44.781502
     },
-    {
-      "id": "tbilisi_state_ballet_school",
-      "title": "Tbilisi State Ballet School — балет",
-      "type": "offline",
-      "categories": ["творчество", "танцы", "балет"],
-      "age": { "min": 12, "max": 18 },
-      "address": "Тбилиси",
-      "coords": null,
-      "links": {
-        "site": "http://stateballetschool.ge/indexsul.php",
-        "about": "https://www.stateballetschool.ge/about_us.php"
-      },
-      "languages": ["ge", "ru"],
-      "blurb": "Классический и характерный танец для подростков.",
-      "source_citations": ["info.md[171-173]", "info.md[185-189]"]
+    "languages": [
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/auditoriabooksbar/",
+      "instagram": "https://www.instagram.com/auditoria_booksbar/",
+      "site": "https://auditoria.taplink.ws"
     },
-    {
-      "id": "teatr_na_vesu",
-      "title": "Театр «На весу» — актёрские курсы",
-      "type": "offline",
-      "categories": ["творчество", "театр", "социум"],
-      "age": { "min": 12, "max": 18 },
-      "address": "Тбилиси",
-      "coords": null,
-      "links": {
-        "about": "https://teatr.ge/semidnevnyj-teatralnyj-trening-v-sochi/"
-      },
-      "languages": ["ru"],
-      "blurb": "Курсы актёрского мастерства: фантазия, пластика, голос, основы драматургии.",
-      "source_citations": ["info.md[39-41]", "info.md[17-18]"]
+    "blurb": "Пространство книг и кружков: шахматы, «Банда умников», анимация «Мультфильм под ключ», мастерские и настолки.",
+    "title": "Auditoria Books Bar — клуб книг и знаний",
+    "type": "offline",
+    "categories": [
+      "интеллект",
+      "социум",
+      "творчество"
+    ]
+  },
+  {
+    "id": "buslik_hub",
+    "title": "Buslik Hub — культурно‑образовательное пространство",
+    "type": "offline",
+    "categories": [
+      "программирование",
+      "социум",
+      "творчество",
+      "театр",
+      "языки"
+    ],
+    "age": {
+      "min": 3,
+      "max": 12
     },
-    {
-      "id": "tesla_engineering_club",
-      "title": "Клуб юных инженеров «Тесла» — робототехника",
-      "type": "offline",
-      "categories": ["программирование", "робототехника", "инженерия"],
-      "age": { "min": 12, "max": 17 },
-      "address": "ул. братьев Зубалашвили, 25, Тбилиси",
-      "coords": { "lat": 41.701532, "lng": 44.791931 },
-      "links": {
-        "site": "http://robotesla.ge"
-      },
-      "languages": ["ru", "ge"],
-      "blurb": "Робототехника, электроника, программирование и механика для подростков.",
-      "source_citations": ["info.md[59-60]", "info.md[133-135]"]
+    "address": "Тбилиси, проспект Агмашенебели, 119 (3 этаж)",
+    "coords": null,
+    "languages": [
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/kindergartens/buslik/",
+      "site": "https://buslik.tilda.ws",
+      "instagram": "https://www.instagram.com/buslikhub_tbilisi/",
+      "facebook": "https://www.facebook.com/p/%D0%94%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B9-%D1%86%D0%B5%D0%BD%D1%82%D1%80-Buslik-Hub-100092447634652/"
     },
-    {
-      "id": "london_gates_tbilisi",
-      "title": "London Gates Tbilisi — британская школа выходного дня",
-      "type": "offline",
-      "categories": ["образование", "английский", "международный"],
-      "age": { "min": 5, "max": 15 },
-      "address": "просп. Ильи Чавчавадзе, 82, Тбилиси",
-      "coords": { "lat": 41.707591, "lng": 44.738643 },
-      "links": {
-        "telegram": "https://t.me/LondonGatesTbilisi",
-        "site": "https://tbilisi.londongates.org"
-      },
-      "languages": ["en", "ru", "ge"],
-      "blurb": "Выходной день по британской программе: обучение на английском и всестороннее развитие.",
-      "source_citations": ["findschool [oai_citation:0‡findschool.ge](https://findschool.ge/sections/londongates/#:~:text=London%20Gates%20Tbilisi)", "findschool [oai_citation:1‡findschool.ge](https://findschool.ge/sections/londongates/#:~:text=%D0%A2%D0%B1%D0%B8%D0%BB%D0%B8%D1%81%D0%B8%2C%20%D0%9F%D1%80%D0%BE%D1%81%D0%BF%D0%B5%D0%BA%D1%82%20%D0%98)"]
+    "blurb": "Сад и кружки: ментальная арифметика, театр, ИЗО, программирование, лагерь, экскурсии; занятия на русском и беларусском."
+  },
+  {
+    "id": "contemporary_ballet_academy",
+    "title": "Contemporary & Ballet Dance Academy — современные танцы",
+    "type": "offline",
+    "categories": [
+      "балет",
+      "современные танцы",
+      "современный танец",
+      "танцы",
+      "творчество"
+    ],
+    "age": {
+      "min": 5,
+      "max": 16
     },
-    {
-      "id": "sciencely_tbilisi",
-      "title": "Sciencely Tbilisi — естественные науки",
-      "type": "offline",
-      "categories": ["наука", "биология", "химия"],
-      "age": { "min": 7, "max": 12 },
-      "address": "пер. Константина Эристави, 3/14, Тбилиси",
-      "coords": { "lat": 41.722, "lng": 44.786 },
-      "links": {
-        "facebook": "https://www.facebook.com/SciencelyTbilisi",
-        "telegram": "https://t.me/sciencely"
-      },
-      "languages": ["ru"],
-      "blurb": "Научные кружки и эксперименты по биологии и химии для детей.",
-      "source_citations": ["findschool [oai_citation:2‡findschool.ge](https://findschool.ge/sections/sciencely/#:~:text=%D0%93%D0%BE%D0%B2%D0%BE%D1%80%D0%B8%D0%BC%20%D0%BD%D0%B0%20%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC)", "findschool [oai_citation:3‡findschool.ge](https://findschool.ge/sections/sciencely/#:~:text=Facebook)"]
+    "address": "ул. Акаки Церетели, 116; ул. Гагарина, 17/19, Тбилиси",
+    "coords": {
+      "lat": 41.723127,
+      "lng": 44.784215
     },
-    {
-      "id": "tsikirduk_lab",
-      "title": "Лаборатория «Цикирдук» — творческая инклюзия",
-      "type": "offline",
-      "categories": ["творчество", "медиа", "инклюзия"],
-      "age": { "min": 10, "max": 12 },
-      "address": "ул. Василия Петриашвили, 24 (Вера), Тбилиси",
-      "coords": { "lat": 41.706224, "lng": 44.780011 },
-      "links": {
-        "facebook": "https://www.facebook.com/tsikirduk/",
-        "telegram": "https://t.me/tsikirduk",
-        "instagram": "https://www.instagram.com/tsikirduk/"
-      },
-      "languages": ["en", "ru"],
-      "blurb": "Инклюзивная творческая студия: театр, кино, танец, арт и музыка для подростков.",
-      "source_citations": ["findschool [oai_citation:4‡findschool.ge](https://findschool.ge/sections/tsikirduk/#:~:text=%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D0%B7%D0%B0%D0%BD%D1%8F%D1%82%D0%B8%D1%8F)", "findschool [oai_citation:5‡findschool.ge](https://findschool.ge/sections/tsikirduk/#:~:text=%D0%9B%D0%B0%D0%B1%D0%BE%D1%80%D0%B0%D1%82%D0%BE%D1%80%D0%B8%D1%8F%20%C2%AB%D0%A6%D0%B8%D0%BA%D0%B8%D1%80%D0%B4%D1%83%D0%BA%C2%BB%20%E2%80%93%20%D1%8D%D1%82%D0%BE%20%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%82%D0%B2%D0%BE,%D0%BC%D0%B8%D1%80%20%D0%B8%20%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%D0%B8%D1%82%D1%8C%20%D1%81%20%D0%BC%D0%B8%D1%80%D0%BE%D0%BC)"]
+    "links": {
+      "about": "https://findschool.ge/sections/contemporary/"
     },
-    {
-      "id": "auditoria_booksbar",
-      "title": "Auditoria Books Bar — клуб книг и знаний",
-      "type": "offline",
-      "categories": ["социум", "интеллект", "творчество"],
-      "age": { "min": 6, "max": 14 },
-      "address": "ул. Симона Джанашия, 26, Тбилиси",
-      "coords": { "lat": 41.705773, "lng": 44.781502 },
-      "links": {
-        "instagram": "https://www.instagram.com/auditoria_booksbar/",
-        "site": "https://auditoria.taplink.ws"
-      },
-      "languages": ["ru"],
-      "blurb": "Книжный бук-бар с интеллектуальными кружками, настольными играми и творческими мастерскими.",
-      "source_citations": ["findschool [oai_citation:6‡findschool.ge](https://findschool.ge/sections/auditoriabooksbar/#:~:text=%D0%9F%D1%80%D0%BE%D1%81%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%82%D0%B2%D0%BE%20%D1%85%D0%BE%D1%80%D0%BE%D1%88%D0%B8%D1%85%20%D0%BA%D0%BD%D0%B8%D0%B3%2C%20%D1%83%D0%BC%D0%BD%D1%8B%D1%85%20%D0%B2%D1%81%D1%82%D1%80%D0%B5%D1%87,%D0%BA%D1%80%D1%83%D0%B6%D0%BA%D0%BE%D0%B2%20%D0%B4%D0%BB%D1%8F%20%D0%B4%D0%B5%D1%82%D0%B5%D0%B9%20%D0%B8%20%D0%B2%D0%B7%D1%80%D0%BE%D1%81%D0%BB%D1%8B%D1%85)", "findschool [oai_citation:7‡findschool.ge](https://findschool.ge/sections/auditoriabooksbar/#:~:text=%D0%9D%D0%B0%D1%88%D0%B8%20%D0%B7%D0%B0%D0%BD%D1%8F%D1%82%D0%B8%D1%8F)"]
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "blurb": "Современная хореография, растяжка и ОФП для детей и подростков."
+  },
+  {
+    "id": "dinamo_academy",
+    "title": "Dinamo Academy — футбол (Лублиана, 62)",
+    "type": "offline",
+    "categories": [
+      "командные виды",
+      "спорт",
+      "футбол"
+    ],
+    "age": {
+      "min": 13,
+      "max": 17
     },
-    {
-      "id": "iskry_istorii",
-      "title": "Искры Истории — клуб истории и географии",
-      "type": "offline",
-      "categories": ["образование", "история", "география"],
-      "age": { "min": 7, "max": 15 },
-      "address": "Ваке, Тбилиси (и онлайн)",
-      "coords": null,
-      "links": {
-        "telegram": "https://t.me/iskryistorii",
-        "facebook": "https://www.facebook.com/groups/1193230577514338"
-      },
-      "languages": ["ru"],
-      "blurb": "Углублённое изучение истории и географии: лекции, экскурсии, семинары и игры для школьников.",
-      "source_citations": ["findschool [oai_citation:8‡findschool.ge](https://findschool.ge/sections/iskryistorii/#:~:text=%D0%94%D0%BB%D1%8F%20%D0%B4%D0%B5%D1%82%D0%B5%D0%B9%207)", "findschool [oai_citation:9‡findschool.ge](https://findschool.ge/sections/iskryistorii/#:~:text=%D0%AF%20%D0%BF%D1%80%D0%B5%D0%BF%D0%BE%D0%B4%D0%B0%D1%8E%20%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%B8%D1%8E%20%D0%B8%20%D0%B3%D0%B5%D0%BE%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%8E,%D0%9E%D0%BD%D0%BB%D0%B0%D0%B9%D0%BD%20%D0%B8%20%D0%BE%D1%84%D1%84%D0%BB%D0%B0%D0%B9%D0%BD)"]
+    "address": "ул. Лублианас, 62, Tbilisi",
+    "coords": {
+      "lat": 41.7486,
+      "lng": 44.7949
     },
-    {
-      "id": "tbilisi_basket_2020",
-      "title": "Tbilisi Basket: 2020 — баскетбольный клуб",
-      "type": "offline",
-      "categories": ["спорт", "командные виды", "баскетбол"],
-      "age": { "min": 6, "max": 18 },
-      "address": "ул. Василия Петриашвили, 7, Тбилиси",
-      "coords": { "lat": 41.707375, "lng": 44.780280 },
-      "links": {
-        "facebook": "https://www.facebook.com/tbilisi.basket2020/"
-      },
-      "languages": ["ge", "ru"],
-      "blurb": "Популярный баскетбольный клуб в Вере, тренировки для детей и подростков.",
-      "source_citations": ["findschool [oai_citation:10‡findschool.ge](https://findschool.ge/sections/tbilisibasket/#:~:text=%D0%93%D0%BE%D0%B2%D0%BE%D1%80%D0%B8%D0%BC%20%D0%BD%D0%B0%20%D0%93%D1%80%D1%83%D0%B7%D0%B8%D0%BD%D1%81%D0%BA%D0%BE%D0%BC%20%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC)"]
+    "links": {
+      "about": "https://yandex.eu/maps/org/dinamo_academy/214904825418/"
     },
-    {
-      "id": "storytelling_club",
-      "title": "Клуб рассказывания историй и самопрезентаций",
-      "type": "offline",
-      "categories": ["общение", "творчество", "навыки"],
-      "age": { "min": 3, "max": 15 },
-      "address": "Тбилиси (локации по договорённости)",
-      "coords": null,
-      "links": {
-        "telegram": "https://t.me/kidsstorytell",
-        "instagram": "https://www.instagram.com/kidsstorytell/",
-        "site": "https://kidsstorytell.ru"
-      },
-      "languages": ["ru"],
-      "blurb": "Творческие встречи, где дети учатся придумывать и рассказывать истории и уверенно себя презентовать.",
-      "source_citations": ["findschool [oai_citation:11‡findschool.ge](https://findschool.ge/sections/selfpresentation/#:~:text=%D0%9A%D0%BB%D1%83%D0%B1%20%D1%80%D0%B0%D1%81%D1%81%D0%BA%D0%B0%D0%B7%D1%8B%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F%20%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B9%20%D0%B8%20%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D0%B9,%D0%BF%D1%80%D0%B8%D0%BD%D0%B8%D0%BC%D0%B0%D1%82%D1%8C%20%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%B8%20%D0%BF%D1%80%D0%BE%D1%81%D1%82%D0%BE%20%D0%B7%D0%B0%D0%BF%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0%D1%8E%D1%82%D1%81%D1%8F)", "findschool [oai_citation:12‡findschool.ge](https://findschool.ge/sections/selfpresentation/#:~:text=%D0%A7%D1%82%D0%BE%20%D0%BD%D0%B0%20%D0%B7%D0%B0%D0%BD%D1%8F%D1%82%D0%B8%D1%8F%D1%85%3F)"]
+    "languages": [
+      "en",
+      "ge"
+    ],
+    "blurb": "Тренировки в академии «Динамо Тбилиси». Девчачьи группы есть у клуба."
+  },
+  {
+    "id": "drum_school",
+    "title": "Drum school — ударные",
+    "type": "offline",
+    "categories": [
+      "музыка",
+      "студия",
+      "ударные"
+    ],
+    "age": {
+      "min": 7,
+      "max": 18
     },
-    {
-      "id": "art_boom",
-      "title": "Art Boom — театральная и танцевальная студия",
-      "type": "offline",
-      "categories": ["творчество", "театр", "танцы"],
-      "age": { "min": 3, "max": 18 },
-      "address": "ул. Атени, 2/5, Тбилиси",
-      "coords": { "lat": 41.710007, "lng": 44.772312 },
-      "links": {
-        "facebook": "https://www.facebook.com/artboomstudio/",
-        "instagram": "https://www.instagram.com/artboom.ge/",
-        "site": "https://artboom.ge"
-      },
-      "languages": ["en", "ge", "ru"],
-      "blurb": "Детская театральная студия с танцевальными классами (в том числе хип-хоп) и художественными курсами.",
-      "source_citations": ["findschool [oai_citation:13‡findschool.ge](https://findschool.ge/sections/artboom/#:~:text=%D0%93%D0%BE%D0%B2%D0%BE%D1%80%D0%B8%D0%BC%20%D0%BD%D0%B0%20%D0%90%D0%BD%D0%B3%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%BE%D0%BC%20%D0%93%D1%80%D1%83%D0%B7%D0%B8%D0%BD%D1%81%D0%BA%D0%BE%D0%BC%20%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC)", "findschool [oai_citation:14‡findschool.ge](https://findschool.ge/sections/artboom/#:~:text=%C2%AB%D0%9E%D0%A7%D0%A3%D0%9C%D0%95%D0%9B%D0%AB%D0%95%20%D0%A0%D0%A3%D0%A7%D0%9A%D0%98%C2%BB%20%E2%80%94%20%D0%BA%D1%83%D1%80%D1%81%20%D0%B4%D0%B5%D0%BA%D0%BE%D1%80%D0%B0%D1%82%D0%B8%D0%B2%D0%BD%D0%BE,%D0%BE%D1%82%207%20%D0%BB%D0%B5%D1%82)"]
+    "address": "Тбилиси, просп. Агмашенебели 106 (Узнадзе 50)",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/drumschool/",
+      "site": "https://drums.ge",
+      "facebook": "https://m.facebook.com/122143472520016/",
+      "instagram": "https://www.instagram.com/drums.ge/"
     },
-    {
-      "id": "smart_kids",
-      "title": "Smart Kids — студия развития и творчества",
-      "type": "offline",
-      "categories": ["развитие", "творчество", "робототехника"],
-      "age": { "min": 1, "max": 15 },
-      "address": "ул. Закариа Палиашвили, 5; ул. Мераба Костава, 75, Тбилиси",
-      "coords": null,
-      "links": {
-        "facebook": "https://www.facebook.com/SmartKidsTbilisi/",
-        "instagram": "https://www.instagram.com/smartkids.tbilisi/"
-      },
-      "languages": ["ge", "ru"],
-      "blurb": "Развивающие занятия, робототехника, творчество, шахматы и кулинария — всё в одном месте для детей разных возрастов.",
-      "source_citations": ["findschool [oai_citation:15‡findschool.ge](https://findschool.ge/sections/smartkids/#:~:text=%D0%94%D0%BB%D1%8F%20%D0%B4%D0%B5%D1%82%D0%B5%D0%B9%201)", "findschool [oai_citation:16‡findschool.ge](https://findschool.ge/sections/smartkids/#:~:text=%D0%A3%20%D0%BD%D0%B0%D1%81%20%D0%B5%D1%81%D1%82%D1%8C%20%D1%82%D0%B0%D0%BA%D0%B8%D0%B5%20%D0%BD%D0%B0%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F,%D0%BE%D1%82%206%20%D0%BB%D0%B5%D1%82)"]
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "blurb": "Игра на ударных и теория ритма; «барабанная терапия» по выходным; репетиционная площадка."
+  },
+  {
+    "id": "emcan_english",
+    "title": "EMCAN English Training Center — разговорные клубы",
+    "type": "offline",
+    "categories": [
+      "английский",
+      "социум",
+      "языки"
+    ],
+    "age": {
+      "min": 12,
+      "max": 15
     },
-    {
-      "id": "twincity_dance",
-      "title": "Twincity Dance Studio — танцы (хип-хоп)",
-      "type": "offline",
-      "categories": ["творчество", "танцы", "хип-хоп"],
-      "age": { "min": 7, "max": 18 },
-      "address": "ул. Михаила Бурдзгла, 74, Тбилиси",
-      "coords": { "lat": 41.723119, "lng": 44.759152 },
-      "links": {
-        "facebook": "https://www.facebook.com/Twincity.Dance.Studio"
-      },
-      "languages": ["ge", "ru"],
-      "blurb": "Известная студия современных танцев под руководством братьев-близнецов: hip-hop, брейк-данс и многое другое.",
-      "source_citations": ["findschool [oai_citation:17‡findschool.ge](https://findschool.ge/sections/twincity/#:~:text=Twincity%20Dance%20Studio%20,%D0%9D%D0%B0%D1%88%D0%BB%D0%B8)"]
+    "address": "ул. Тараса Шевченко, 10, Тбилиси",
+    "coords": {
+      "lat": 41.697473,
+      "lng": 44.79654
     },
-    {
-      "id": "judo_club_georgia",
-      "title": "Judo Club \"Georgia\" — дзюдо",
-      "type": "offline",
-      "categories": ["спорт", "боевые искусства", "дзюдо"],
-      "age": { "min": 7, "max": 18 },
-      "address": "ул. Богдана Хмельницкого, 48, Тбилиси",
-      "coords": { "lat": 41.67155, "lng": 44.87105 },
-      "links": {},
-      "languages": ["ge"],
-      "blurb": "Спортивный клуб дзюдо в районе Исани, занятия после школьных часов (16:00–21:30).",
-      "source_citations": ["findschool [oai_citation:18‡findschool.ge](https://findschool.ge/sections/judoclub/#:~:text=Judo%20Club%20,21%3A30)"]
+    "links": {
+      "site": "https://www.emcaned.ge/english/"
     },
-    {
-      "id": "english_in_tbilisi",
-      "title": "English in Tbilisi — курсы английского языка",
-      "type": "offline",
-      "categories": ["языки", "английский", "экзамены"],
-      "age": { "min": 3, "max": 17 },
-      "address": "ул. Анны Каландадзе, 7, Тбилиси",
-      "coords": { "lat": 41.726208, "lng": 44.770004 },
-      "links": {
-        "telegram": "https://t.me/english_in_tbilisi",
-        "instagram": "https://instagram.com/english_in_tbilisi",
-        "site": "https://taplink.cc/english_in_tbilisi"
-      },
-      "languages": ["en", "ru"],
-      "blurb": "Русскоязычная школа английского: разговорные курсы и подготовка к Cambridge Exams, IELTS, TOEFL (для подростков до 17 лет).",
-      "source_citations": ["findschool [oai_citation:19‡findschool.ge](https://findschool.ge/sections/englishtbs/#:~:text=%D0%A8%D0%BA%D0%BE%D0%BB%D0%B0%20English%20in%20Tbilisi%20%D0%BF%D1%80%D0%B5%D0%B4%D0%BB%D0%B0%D0%B3%D0%B0%D0%B5%D1%82,%D0%BF%D0%BE%D0%B4%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BA%D0%B8%2C%20%D0%BE%D1%82%20%D0%BD%D0%B0%D1%87%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%B4%D0%BE%20%D0%BF%D1%80%D0%BE%D0%B4%D0%B2%D0%B8%D0%BD%D1%83%D1%82%D0%BE%D0%B3%D0%BE)"]
+    "blurb": "Разговорные клубы и подготовка к экзаменам для подростков 12–15.",
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ]
+  },
+  {
+    "id": "english_in_tbilisi",
+    "age": {
+      "min": 3,
+      "max": 17
     },
-    {
-      "id": "aqua_centre_fitness",
-      "title": "Aqua Centre and Fitness — плавание (Глдани)",
-      "type": "offline",
-      "categories": ["спорт", "здоровье", "плавание"],
-      "age": { "min": 5, "max": 18 },
-      "address": "ул. Керченская, 1, Тбилиси",
-      "coords": { "lat": 41.787424, "lng": 44.801031 },
-      "links": {
-        "facebook": "https://www.facebook.com/aquacentre.ge",
-        "instagram": "https://www.instagram.com/aquacentre_fitness/"
-      },
-      "languages": ["ru"],
-      "blurb": "Тренер по плаванию: обучение с нуля, улучшение техники, подготовка к соревнованиям, укрепление здоровья.",
-      "source_citations": ["findschool [oai_citation:20‡findschool.ge](https://findschool.ge/sections/aquacenter/#:~:text=,%D0%B4%D0%B2%D0%B8%D0%B3%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%B0%D0%BF%D0%BF%D0%B0%D1%80%D0%B0%D1%82%D0%B0%2C%20%D1%80%D0%B5%D0%B0%D0%B1%D0%B8%D0%BB%D0%B8%D1%82%D0%B0%D1%86%D0%B8%D1%8F%20%D0%BF%D0%BE%D1%81%D0%BB%D0%B5%20%D0%BE%D0%BF%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D0%B9)"]
+    "address": "Тбилиси, 7, Ana Kalandadze Street",
+    "coords": {
+      "lat": 41.726208,
+      "lng": 44.770004
     },
-    {
-      "id": "green_prospector",
-      "title": "«Зелёный изыскатель» — ботанические квесты",
-      "type": "offline",
-      "categories": ["природа", "наука", "игры"],
-      "age": { "min": 7, "max": 12 },
-      "address": "Тбилиси (Ботанический сад и парки; онлайн)",
-      "coords": null,
-      "links": {},
-      "languages": ["ru"],
-      "blurb": "Ботанические бродилки: прогулки по паркам, травы и деревья, кулинарные и творческие мастер-классы из растений.",
-      "source_citations": ["findschool [oai_citation:21‡findschool.ge](https://findschool.ge/sections/green/#:~:text=%D0%A2%D0%B1%D0%B8%D0%BB%D0%B8%D1%81%D0%B8%2C%20%D0%91%D0%BE%D1%82%D0%B0%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9%20%D1%81%D0%B0%D0%B4%20%D0%94%D0%B5%D1%80%D0%B5%D0%B2%D0%BD%D1%8F%20%D0%94%D0%B0%D0%B1%D0%B0%D0%B4%D0%B7%D0%B2%D0%B5%D0%BB%D0%B8,%D0%A2%D0%BA%D0%B8%D0%B1%D1%83%D0%BB%D1%8C%D1%81%D0%BA%D0%B8%D0%B9%20%D1%80%D0%B0%D0%B9%D0%BE%D0%BD%20%D0%9E%D0%BD%D0%BB%D0%B0%D0%B9%D0%BD)", "findschool [oai_citation:22‡findschool.ge](https://findschool.ge/sections/green/#:~:text=%D0%BF%D0%BE%D0%BB%D0%B5%D0%B7%D0%BD%D0%BE%D0%B9%20%D0%B8%20%D0%B2%D0%BA%D1%83%D1%81%D0%BD%D0%BE%D0%B9%20%E2%80%A6%20%D0%B1%D0%BE%D1%82%D0%B0%D0%BD%D0%B8%D0%BA%D0%BE%D0%B9%21,%D1%80%D0%B0%D0%B7%D0%B1%D0%B8%D1%80%D0%B0%D1%82%D1%8C%D1%81%D1%8F%20%D0%B2%20%D0%BE%D1%81%D0%BD%D0%BE%D0%B2%D0%B0%D1%85%20%D0%B1%D0%B8%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D0%B8)"]
+    "languages": [
+      "en",
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/englishtbs/",
+      "telegram": "https://t.me/english_in_tbilisi",
+      "instagram": "https://instagram.com/english_in_tbilisi",
+      "site": "https://taplink.cc/english.in.tbilisi"
     },
-    {
-      "id": "nata_studio",
-      "title": "Nata Studio — искусство и языки",
-      "type": "offline",
-      "categories": ["искусство", "образование", "языки"],
-      "age": { "min": 6, "max": 18 },
-      "address": "ул. Белинского, 61, Тбилиси",
-      "coords": { "lat": 41.702502, "lng": 44.784017 },
-      "links": {
-        "facebook": "https://www.facebook.com/NataStudioGeorgia",
-        "site": "https://www.natasstudio.com"
-      },
-      "languages": ["ge"],
-      "blurb": "Творческая студия с 1999 года: интерактивное обучение искусству и иностранным языкам без скуки и с увлечением.",
-      "source_citations": ["findschool [oai_citation:23‡findschool.ge](https://findschool.ge/sections/natastudio/#:~:text=%D0%A1%D1%82%D1%83%D0%B4%D0%B8%D1%8F%20%D0%B8%D1%81%D0%BA%D1%83%D1%81%D1%81%D1%82%D0%B2%D0%B0%20%D0%B8%20%D0%B8%D0%BD%D0%BE%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%BD%D1%8B%D1%85%20%D1%8F%D0%B7%D1%8B%D0%BA%D0%BE%D0%B2)"]
+    "blurb": "Русскоязычная школа английского: разговорные курсы и подготовка к Cambridge Exams, IELTS, TOEFL (для подростков до 17 лет).",
+    "title": "English in Tbilisi — курсы английского языка",
+    "type": "offline",
+    "categories": [
+      "английский",
+      "экзамены",
+      "языки"
+    ]
+  },
+  {
+    "id": "fantasy_dance",
+    "title": "Fantasy — танцевальная школа",
+    "type": "offline",
+    "categories": [
+      "гимнастика",
+      "контемп",
+      "танцы",
+      "творчество",
+      "хип‑хоп"
+    ],
+    "age": {
+      "min": 5,
+      "max": 18
     },
-    {
-      "id": "robo_coder",
-      "title": "ROBO Coder — лего-робототехника",
-      "type": "offline",
-      "categories": ["программирование", "робототехника", "stem"],
-      "age": { "min": 3, "max": 15 },
-      "address": "ул. Эдишера Магалашвили, 5, Тбилиси",
-      "coords": { "lat": 41.721537, "lng": 44.740817 },
-      "links": {
-        "facebook": "https://www.facebook.com/robocoderGeorgia"
-      },
-      "languages": ["ge", "ru"],
-      "blurb": "Курсы LEGO-робототехники: от простых механизмов для малышей до программирования Mindstorms для подростков 10–15 лет.",
-      "source_citations": ["findschool [oai_citation:24‡findschool.ge](https://findschool.ge/sections/robocoder/#:~:text=%D0%9C%D1%8B%20%D0%BF%D1%80%D0%B5%D0%B4%D0%BB%D0%B0%D0%B3%D0%B0%D0%B5%D0%BC%20%D1%81%D0%BB%D0%B5%D0%B4%D1%83%D1%8E%D1%89%D0%B8%D0%B5%20%D0%BA%D1%83%D1%80%D1%81%D1%8B%3A)"]
-    }
-  ]
+    "address": "Тбилиси, ул. Ацкури, 70",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/fantasy/"
+    },
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "blurb": "Гимнастика, современные направления, хип‑хоп (все стили), латина, модерн, контемп."
+  },
+  {
+    "id": "ge_breakdance_fed",
+    "title": "Georgian Break Dance Federation",
+    "type": "offline",
+    "categories": [
+      "брейк-данс",
+      "спорт",
+      "танцы",
+      "творчество"
+    ],
+    "age": {
+      "min": 5,
+      "max": 18
+    },
+    "address": "Тбилиси, ул. Узнадзе, 23",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/breakdance/"
+    },
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "blurb": "Федерация брейк‑данса Грузии; группы для детей, подростков и взрослых."
+  },
+  {
+    "id": "gladius_bjj",
+    "title": "Gladius Brazilian Jiu‑Jitsu",
+    "type": "offline",
+    "categories": [
+      "боевые искусства",
+      "выносливость",
+      "спорт"
+    ],
+    "age": {
+      "min": 13,
+      "max": 18
+    },
+    "address": "ул. Мераба Костава, 6 (район Вера) / ул. Георгия Читаиа, 7",
+    "coords": {
+      "lat": 41.704932,
+      "lng": 44.789245
+    },
+    "links": {
+      "site": "https://jiu-jitsu.ge/",
+      "findschool": "https://findschool.ge/sections/gladius/"
+    },
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "blurb": "BJJ для подростков: физподготовка, дисциплина и дружеская атмосфера."
+  },
+  {
+    "id": "gymnasia_lisi",
+    "title": "Gymnasia Lisi — спорт и mindfulness",
+    "type": "offline",
+    "categories": [
+      "дзюдо",
+      "йога",
+      "мма",
+      "спорт",
+      "танцы",
+      "фитнес"
+    ],
+    "age": {
+      "min": 5,
+      "max": 18
+    },
+    "address": "Тбилиси, 14a Elguja Amashukeli St (Lisi)",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/gymnasia/",
+      "site": "https://gymnasia.ge",
+      "facebook": "https://www.facebook.com/gymnasia.ge",
+      "instagram": "https://www.instagram.com/gymnasia.sports/",
+      "telegram": "https://t.me/gymnasiainfo"
+    },
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "blurb": "Групповые занятия для детей и взрослых: йога, пилатес, танцы, дзюдо, ММА, BJJ, ниндзя‑парк."
+  },
+  {
+    "id": "ikalto_academy",
+    "title": "Ikalto плавучая академия",
+    "type": "offline",
+    "categories": [
+      "литература",
+      "логика",
+      "музыка"
+    ],
+    "age": {
+      "min": 7,
+      "max": 18
+    },
+    "address": "Тбилиси, Гора Икалто (IKALTO HILL), дом 40, 1 этаж; + онлайн",
+    "coords": null,
+    "languages": [
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/ikalto/"
+    },
+    "blurb": "Микрогруппы по музыке (гитара, блок‑флейта, сольфеджио), логика и «медленное чтение»."
+  },
+  {
+    "id": "ih_tbilisi",
+    "title": "International House Tbilisi — английский",
+    "type": "offline",
+    "categories": [
+      "английский",
+      "общение",
+      "языки"
+    ],
+    "age": {
+      "min": 7,
+      "max": 16
+    },
+    "address": "Тбилиси, Площадь 26 Мая / Долидзе, 2",
+    "coords": {
+      "lat": 41.71753,
+      "lng": 44.77712
+    },
+    "links": {
+      "site": "https://ihtbilisi.ge/en/contact/",
+      "about": "https://findschool.ge/sections/ihouse/"
+    },
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "blurb": "Английский для групп 7–9, 10–12, 13–16; подготовка к экзаменам (PET, FCE, CAE, CPE, IELTS, SAT)."
+  },
+  {
+    "id": "judo_club_georgia",
+    "title": "Judo Club \"Georgia\" — дзюдо",
+    "type": "offline",
+    "categories": [
+      "боевые искусства",
+      "дзюдо",
+      "спорт"
+    ],
+    "age": {
+      "min": 7,
+      "max": 18
+    },
+    "address": "ул. Богдана Хмельницкого, 48, Тбилиси",
+    "coords": {
+      "lat": 41.67155,
+      "lng": 44.87105
+    },
+    "languages": [
+      "ge"
+    ],
+    "blurb": "Спортивный клуб дзюдо в районе Исани, занятия после школьных часов (16:00–21:30).",
+    "links": {}
+  },
+  {
+    "id": "kera_space",
+    "title": "KERA Space — подростковые курсы и театр",
+    "type": "offline",
+    "categories": [
+      "бизнес",
+      "навыки",
+      "софт скиллы",
+      "социум",
+      "театр",
+      "химия"
+    ],
+    "age": {
+      "min": 7,
+      "max": 18
+    },
+    "address": "ул. Гии Шатберашвили, 23, Тбилиси",
+    "coords": {
+      "lat": 41.703484,
+      "lng": 44.774348
+    },
+    "links": {
+      "about": "https://findschool.ge/sections/keraspace/"
+    },
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "blurb": "Креативное пространство: бизнес‑школа и soft skills 10+, театр «Кракатук», химическая школа."
+  },
+  {
+    "id": "kids_arena",
+    "title": "Kids Arena",
+    "type": "offline",
+    "categories": [
+      "акробатика",
+      "спорт",
+      "фитнес"
+    ],
+    "age": {
+      "min": 2,
+      "max": 18
+    },
+    "address": "Тбилиси, ул. Университета, 2",
+    "coords": null,
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/kidsarena/"
+    },
+    "blurb": "Силовые, статические и скоростные тренировки, акробатика. Будние 09:00–20:00, выходные 10:00–13:00."
+  },
+  {
+    "id": "legend_dance",
+    "title": "Legend Dance — студия танца",
+    "type": "offline",
+    "categories": [
+      "танцы",
+      "творчество",
+      "хореография"
+    ],
+    "age": {
+      "min": 5,
+      "max": 15
+    },
+    "address": "Тбилиси, ул. Петра Меликишвили, 2 (Вера)",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/legenddance/"
+    },
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "blurb": "Современная студия в районе Вера."
+  },
+  {
+    "id": "leviosa_center",
+    "title": "Leviosa — танец и движение",
+    "type": "offline",
+    "categories": [
+      "гимнастика",
+      "карате",
+      "спорт",
+      "танцы"
+    ],
+    "age": {
+      "min": 5,
+      "max": 18
+    },
+    "address": "Тбилиси, ул. Анны Политковской, 3",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/leviosa/"
+    },
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "blurb": "Пилатес, карате, хип‑хоп, аргентинское танго, гимнастика."
+  },
+  {
+    "id": "liberal_arts_space",
+    "title": "Liberal Arts Space — креативное пространство",
+    "type": "offline",
+    "categories": [
+      "искусство",
+      "кружки",
+      "социум",
+      "танцы",
+      "творчество"
+    ],
+    "age": {
+      "min": 10,
+      "max": 18
+    },
+    "address": "ул. Цинцадзе, 58, Тбилиси",
+    "coords": {
+      "lat": 41.721355,
+      "lng": 44.746821
+    },
+    "links": {
+      "about": "https://findschool.ge/sections/liberalart/",
+      "instagram": "https://www.instagram.com/liberal_arts_space/",
+      "telegram": "https://t.me/liberal_arts_space"
+    },
+    "languages": [
+      "en",
+      "ru"
+    ],
+    "blurb": "Креативное пространство: танцы, акробатика, художественные мастерские, театр, керамика, скетчинг, клуб подростков."
+  },
+  {
+    "id": "london_gates_tbilisi",
+    "title": "London Gates Tbilisi — британская школа выходного дня",
+    "type": "offline",
+    "categories": [
+      "английский",
+      "международный",
+      "образование"
+    ],
+    "age": {
+      "min": 5,
+      "max": 15
+    },
+    "address": "Тбилиси, проспект И. Чавчавадзе, 82",
+    "coords": {
+      "lat": 41.707591,
+      "lng": 44.738643
+    },
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/londongates/",
+      "telegram": "https://t.me/LondonGatesTbilisi",
+      "site": "https://tbilisi.londongates.org"
+    },
+    "blurb": "Британская программа выходного дня. Английский, Pearson Edexcel; поступление в международные колледжи и вузы."
+  },
+  {
+    "id": "meko_studio",
+    "title": "Meko studio — вокал, театр, танец",
+    "type": "offline",
+    "categories": [
+      "вокал",
+      "йога",
+      "танцы",
+      "творчество",
+      "театр"
+    ],
+    "age": {
+      "min": 7,
+      "max": 18
+    },
+    "address": "Тбилиси, Университетская 6, Арена 2",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/meko/",
+      "site": "https://www.mekostudio.ge",
+      "instagram": "https://www.instagram.com/meko_sstudio/",
+      "facebook": "https://www.facebook.com/mekostudio.ge/"
+    },
+    "languages": [
+      "en",
+      "ge"
+    ],
+    "blurb": "Вокал, рисование, театральный блок, балет (modern), грузинский танец, хип‑хоп, йога."
+  },
+  {
+    "id": "minecraft_ge_servers",
+    "title": "Minecraft сервера в Грузии (MINEVALS и др.)",
+    "type": "online",
+    "categories": [
+      "minecraft",
+      "игры",
+      "сообщество"
+    ],
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "age": {
+      "min": 13,
+      "max": 18
+    },
+    "address": "Онлайн",
+    "coords": null,
+    "links": {
+      "list": "https://minecraft-mp.com/country/georgia/"
+    },
+    "blurb": "Подборка локальных серверов (например, wonderlands.ge:55750)."
+  },
+  {
+    "id": "mister_octopus",
+    "title": "Mister Octopus — Центр иностранных языков",
+    "type": "offline",
+    "categories": [
+      "английский",
+      "русский как иностранный",
+      "языки"
+    ],
+    "age": {
+      "min": 5,
+      "max": 18
+    },
+    "address": "Тбилиси, ул. Тамарашвили, 14; онлайн",
+    "coords": {
+      "lat": 41.724936,
+      "lng": 44.744985
+    },
+    "languages": [
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/octopus/",
+      "site": "https://eschumova.wixsite.com",
+      "facebook": "https://www.facebook.com/mroctopus.tbilisi"
+    },
+    "blurb": "Русскоязычные преподаватели из Украины и Грузии; коммуникативная методика, бесплатное тестирование."
+  },
+  {
+    "id": "nata_studio",
+    "title": "Nata Studio — искусство и языки",
+    "type": "offline",
+    "categories": [
+      "искусство",
+      "образование",
+      "творчество",
+      "языки"
+    ],
+    "age": {
+      "min": 6,
+      "max": 18
+    },
+    "address": "Тбилиси, ул. Белинского, 61",
+    "coords": {
+      "lat": 41.702502,
+      "lng": 44.784017
+    },
+    "links": {
+      "about": "https://findschool.ge/sections/natastudio/",
+      "site": "https://www.natasstudio.com",
+      "facebook": "https://www.facebook.com/NataStudioGeorgia"
+    },
+    "languages": [
+      "ge"
+    ],
+    "blurb": "Творческая студия с 1999 года: интерактивное обучение искусству и иностранным языкам без скуки и с увлечением."
+  },
+  {
+    "id": "neurohub_tbilisi",
+    "title": "NEUROhub — поддержка и группы для подростков",
+    "type": "offline",
+    "categories": [
+      "поддержка",
+      "психология",
+      "социум"
+    ],
+    "age": {
+      "min": 10,
+      "max": 18
+    },
+    "address": "ул. Мераба Костава, 43, Тбилиси",
+    "coords": {
+      "lat": 41.708654,
+      "lng": 44.785724
+    },
+    "links": {
+      "about": "https://findschool.ge/sections/neurohub/"
+    },
+    "languages": [
+      "ru"
+    ],
+    "blurb": "Группы и индивидуальная помощь подросткам; мероприятия и клубы."
+  },
+  {
+    "id": "olympic_pool",
+    "title": "Olympic Pool — плавание",
+    "type": "offline",
+    "categories": [
+      "здоровье",
+      "плавание",
+      "спорт"
+    ],
+    "age": {
+      "min": 13,
+      "max": 18
+    },
+    "address": "Bob Walsh St, 21, Tbilisi",
+    "coords": {
+      "lat": 41.67375,
+      "lng": 44.84425
+    },
+    "links": {
+      "map": "https://yandex.com/maps/org/olympic_pool/93883809324/"
+    },
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "blurb": "Большой бассейн, дорожки для тренировок и общеукрепляющих занятий."
+  },
+  {
+    "id": "pirvelebi_rg",
+    "title": "Pirvelebi — художественная гимнастика",
+    "type": "offline",
+    "categories": [
+      "гимнастика",
+      "ритмика",
+      "спорт"
+    ],
+    "age": {
+      "min": 4,
+      "max": 14
+    },
+    "address": "Тбилиси, Университетская 6 / Арена 2",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/pirvelebi/"
+    },
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "blurb": "Клуб художественной гимнастики: зал по международным стандартам, тренеры‑чемпионки."
+  },
+  {
+    "id": "real_talk",
+    "title": "REAL TALK — английский соцклуб",
+    "type": "offline",
+    "categories": [
+      "английский",
+      "игры",
+      "социум"
+    ],
+    "age": {
+      "min": 13,
+      "max": 18
+    },
+    "address": "локации меняются (центральные районы)",
+    "coords": null,
+    "links": {
+      "meetup": "https://www.meetup.com/real-talk-tbilisi/"
+    },
+    "languages": [
+      "en"
+    ],
+    "blurb": "Живые встречи: разговорные игры, новые друзья. Можно прийти с родителем в первый раз."
+  },
+  {
+    "id": "roblox_georgian_fb",
+    "title": "Roblox Georgian Community (Facebook)",
+    "type": "online",
+    "categories": [
+      "roblox",
+      "игры",
+      "сообщество"
+    ],
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "age": {
+      "min": 13,
+      "max": 18
+    },
+    "address": "Онлайн",
+    "coords": null,
+    "links": {
+      "facebook": "https://www.facebook.com/groups/RobloxGeorgian/"
+    },
+    "blurb": "Грузинское сообщество Roblox: новости, чат, ссылки на Discord."
+  },
+  {
+    "id": "roblox_tbilisi_hood",
+    "title": "Roblox: Tbilisi Hood (Discord)",
+    "type": "online",
+    "categories": [
+      "roblox",
+      "игры",
+      "сообщество"
+    ],
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "age": {
+      "min": 13,
+      "max": 18
+    },
+    "address": "Онлайн",
+    "coords": null,
+    "links": {
+      "discord": "https://discord.do/tbilisi-hood/",
+      "roblox_game": "https://www.roblox.com/games/11341988109/Tbilisi-Hood"
+    },
+    "blurb": "Локальное сообщество вокруг игры «Tbilisi Hood» в Roblox."
+  },
+  {
+    "id": "robo_coder",
+    "age": {
+      "min": 3,
+      "max": 15
+    },
+    "address": "Тбилиси, ул. Эдишера Магалашвили, 5",
+    "coords": {
+      "lat": 41.721537,
+      "lng": 44.740817
+    },
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/robocoder/",
+      "facebook": "https://www.facebook.com/robocoderGeorgia"
+    },
+    "blurb": "Курсы LEGO-робототехники: от простых механизмов для малышей до программирования Mindstorms для подростков 10–15 лет.",
+    "title": "ROBO Coder — лего-робототехника",
+    "type": "offline",
+    "categories": [
+      "stem",
+      "программирование",
+      "робототехника"
+    ]
+  },
+  {
+    "id": "sk_lucky_climbing",
+    "title": "S.K. Lucky — скалодром",
+    "type": "offline",
+    "categories": [
+      "скалолазание",
+      "спорт"
+    ],
+    "age": {
+      "min": 5,
+      "max": 18
+    },
+    "address": "Тбилиси, Университетская 6, Арена 2",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/sklucky/"
+    },
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "blurb": "Скалодром до 12 метров, боулдеринговая зона, индивидуальные и групповые тренировки."
+  },
+  {
+    "id": "sciencely_tbilisi",
+    "age": {
+      "min": 7,
+      "max": 12
+    },
+    "address": "Тбилиси, пер. Константина Эристави, 3/14",
+    "coords": {
+      "lat": 41.722,
+      "lng": 44.786
+    },
+    "languages": [
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/sciencely/",
+      "facebook": "https://www.facebook.com/SciencelyTbilisi",
+      "telegram": "https://t.me/sciencely",
+      "instagram": "https://www.instagram.com/sciencely/"
+    },
+    "blurb": "Практические кружки по естественным наукам: биология и химия, мероприятия и эксперименты.",
+    "title": "Sciencely Tbilisi — естественные науки",
+    "type": "offline",
+    "categories": [
+      "биология",
+      "наука",
+      "химия"
+    ]
+  },
+  {
+    "id": "shavlego_dance",
+    "title": "Shavlego — студия грузинского танца",
+    "type": "offline",
+    "categories": [
+      "грузинские танцы",
+      "танцы",
+      "творчество"
+    ],
+    "age": {
+      "min": 5,
+      "max": 18
+    },
+    "address": "Тбилиси, 19 Mikheil Shavishvili St",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/shavlego/"
+    },
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "blurb": "Хореографическая студия грузинского танца."
+  },
+  {
+    "id": "smart_kids",
+    "age": {
+      "min": 1,
+      "max": 15
+    },
+    "address": "Тбилиси, ул. Закариа Палиашвили, 5; ул. Мераба Костава, 75",
+    "coords": null,
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/smartkids/",
+      "facebook": "https://www.facebook.com/SmartKidsTbilisi/",
+      "instagram": "https://www.instagram.com/smartkids.tbilisi/"
+    },
+    "blurb": "Развивающие занятия, робототехника, творчество, шахматы и кулинария — всё в одном месте для детей разных возрастов.",
+    "title": "Smart Kids — студия развития и творчества",
+    "type": "offline",
+    "categories": [
+      "развитие",
+      "робототехника",
+      "творчество"
+    ]
+  },
+  {
+    "id": "tbilisi_basket_2020",
+    "title": "Tbilisi Basket — баскетбол",
+    "type": "offline",
+    "categories": [
+      "баскетбол",
+      "командные виды",
+      "спорт"
+    ],
+    "age": {
+      "min": 6,
+      "max": 18
+    },
+    "address": "ул. Василия Петриашвили, 7, Тбилиси",
+    "coords": {
+      "lat": 41.707375,
+      "lng": 44.78028
+    },
+    "links": {
+      "about": "https://findschool.ge/sections/tbilisibasket/",
+      "facebook": "https://www.facebook.com/tbilisi.basket2020/",
+      "instagram": "https://www.instagram.com/tbilisibasket/"
+    },
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "blurb": "Клуб баскетбола, который рекомендуют семьи экспатов. Группы для подростков 10–18."
+  },
+  {
+    "id": "tbilisi_little_bookworms",
+    "title": "Tbilisi Little Bookworms — детская библиотека (EN)",
+    "type": "offline",
+    "categories": [
+      "книги",
+      "общение",
+      "социум"
+    ],
+    "age": {
+      "min": 5,
+      "max": 18
+    },
+    "address": "Tbilisi, 14 Petre Kavtaradze",
+    "coords": {
+      "lat": 41.721241,
+      "lng": 44.737269
+    },
+    "links": {
+      "about": "https://findschool.ge/sections/bookworms/",
+      "site": "https://tbilisilittlebookworms.com",
+      "facebook": "https://www.facebook.com/tbilisilittlebookworms/"
+    },
+    "languages": [
+      "en"
+    ],
+    "blurb": "Англоязычная библиотека: членство, бронирование и выдача книг для детей."
+  },
+  {
+    "id": "tbilisi_state_ballet_school",
+    "title": "Tbilisi State Ballet School — балет",
+    "type": "offline",
+    "categories": [
+      "балет",
+      "танцы",
+      "творчество"
+    ],
+    "age": {
+      "min": 12,
+      "max": 18
+    },
+    "address": "ул. Векуа, 1, Тбилиси",
+    "coords": {
+      "lat": 41.697008,
+      "lng": 44.803556
+    },
+    "links": {
+      "site": "http://stateballetschool.ge/indexsul.php",
+      "about": "https://www.stateballetschool.ge/about_us.php"
+    },
+    "blurb": "Классический и характерный танец для подростков.",
+    "languages": [
+      "ge",
+      "ru"
+    ]
+  },
+  {
+    "id": "teen_talks",
+    "title": "Teen Talks Social Club",
+    "type": "offline",
+    "categories": [
+      "клуб",
+      "общение",
+      "социум"
+    ],
+    "age": {
+      "min": 10,
+      "max": 15
+    },
+    "address": "ул. Адама Мицкевича, 29, Тбилиси",
+    "coords": {
+      "lat": 41.724572,
+      "lng": 44.760185
+    },
+    "links": {
+      "about": "https://findschool.ge/sections/teentalks/"
+    },
+    "languages": [
+      "en",
+      "ru"
+    ],
+    "blurb": "Социальный клуб 10–14: книжный и дискуссионный клубы, игротека, походы и пикники на русском и английском."
+  },
+  {
+    "id": "teenergizer_tbilisi",
+    "title": "Teenergizer — международная организация для подростков",
+    "type": "online",
+    "categories": [
+      "поддержка",
+      "сообщество",
+      "социум"
+    ],
+    "age": {
+      "min": 12,
+      "max": 19
+    },
+    "address": "Онлайн и Тбилиси",
+    "coords": null,
+    "links": {
+      "about": "https://teenergizer.org/ru/about/"
+    },
+    "blurb": "Сообщество подростков, офис в Тбилиси, мероприятия и поддержка.",
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ]
+  },
+  {
+    "id": "twincity_dance",
+    "age": {
+      "min": 7,
+      "max": 18
+    },
+    "address": "ул. Михаила Бурдзгла, 74, Тбилиси",
+    "coords": {
+      "lat": 41.723119,
+      "lng": 44.759152
+    },
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/twincity/",
+      "facebook": "https://www.facebook.com/Twincity.Dance.Studio"
+    },
+    "blurb": "Известная студия современных танцев под руководством братьев-близнецов: hip-hop, брейк-данс и многое другое.",
+    "title": "Twincity Dance Studio — танцы (хип-хоп)",
+    "type": "offline",
+    "categories": [
+      "танцы",
+      "творчество",
+      "хип-хоп"
+    ]
+  },
+  {
+    "id": "volunteers_tbilisi",
+    "title": "Volunteers Tbilisi — волонтёрские мероприятия",
+    "type": "offline",
+    "categories": [
+      "волонтерство",
+      "мероприятия",
+      "социум"
+    ],
+    "age": {
+      "min": 12,
+      "max": 18
+    },
+    "address": "Тбилиси, разные локации",
+    "coords": null,
+    "links": {
+      "about": "https://t.me/s/volunteerstbilisi"
+    },
+    "blurb": "Квесты, мастер‑классы и социальные проекты для подростков 12+.",
+    "languages": [
+      "ru"
+    ]
+  },
+  {
+    "id": "green_prospector",
+    "title": "«Зелёный изыскатель» — ботанические квесты",
+    "type": "offline",
+    "categories": [
+      "игры",
+      "наука",
+      "природа"
+    ],
+    "age": {
+      "min": 7,
+      "max": 12
+    },
+    "address": "Тбилиси (Ботанический сад и парки; онлайн)",
+    "coords": null,
+    "languages": [
+      "ru"
+    ],
+    "blurb": "Ботанические бродилки: прогулки по паркам, травы и деревья, кулинарные и творческие мастер-классы из растений.",
+    "links": {}
+  },
+  {
+    "id": "iskry_istorii",
+    "age": {
+      "min": 7,
+      "max": 15
+    },
+    "address": "Тбилиси, Ваке (и онлайн)",
+    "coords": null,
+    "languages": [
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/iskryistorii/",
+      "telegram": "https://t.me/iskryistorii",
+      "facebook": "https://www.facebook.com/groups/1193230577514338"
+    },
+    "blurb": "Углублённое изучение истории и географии: лекции, экскурсии, семинары и игры для школьников.",
+    "title": "Искры Истории — клуб истории и географии",
+    "type": "offline",
+    "categories": [
+      "география",
+      "история",
+      "образование"
+    ]
+  },
+  {
+    "id": "kids_yoga_shartava41",
+    "title": "Йога для детей и подростков — Валерия Жезло",
+    "type": "offline",
+    "categories": [
+      "здоровье",
+      "йога",
+      "спорт"
+    ],
+    "age": {
+      "min": 10,
+      "max": 18
+    },
+    "address": "ул. Жиули Шартава, 41, Тбилиси",
+    "coords": {
+      "lat": 41.730131,
+      "lng": 44.770695
+    },
+    "links": {
+      "about": "https://findschool.ge/sections/yoga/"
+    },
+    "languages": [
+      "ru"
+    ],
+    "blurb": "Осанка, дыхание и концентрация. Отдельные группы для школьников и подростков."
+  },
+  {
+    "id": "storytelling_club",
+    "age": {
+      "min": 3,
+      "max": 18
+    },
+    "address": "Тбилиси (локации по договорённости)",
+    "languages": [
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/selfpresentation/",
+      "site": "https://kidsstorytell.ru",
+      "telegram": "https://t.me/kidsstorytell",
+      "instagram": "https://www.instagram.com/kidsstorytell/"
+    },
+    "blurb": "Творческие встречи, где дети учатся придумывать и рассказывать истории и уверенно себя презентовать.",
+    "title": "Клуб рассказывания историй и самопрезентаций",
+    "type": "offline",
+    "categories": [
+      "навыки",
+      "общение",
+      "творчество",
+      "коммуникации",
+      "социум"
+    ],
+    "coords": null
+  },
+  {
+    "id": "tesla_engineering_club",
+    "title": "Клуб юных инженеров «Тесла» — робототехника",
+    "type": "offline",
+    "categories": [
+      "инженерия",
+      "программирование",
+      "робототехника"
+    ],
+    "age": {
+      "min": 12,
+      "max": 17
+    },
+    "address": "ул. Братьев Зубалашвили, 25, Тбилиси",
+    "coords": {
+      "lat": 41.701532,
+      "lng": 44.791931
+    },
+    "links": {
+      "site": "http://robotesla.ge"
+    },
+    "blurb": "Робототехника, электроника, программирование и механика для подростков.",
+    "languages": [
+      "ge",
+      "ru"
+    ]
+  },
+  {
+    "id": "kubik_rubik_code",
+    "title": "Кубик Рубик — школа программирования",
+    "type": "offline",
+    "categories": [
+      "it",
+      "игры",
+      "программирование"
+    ],
+    "age": {
+      "min": 7,
+      "max": 14
+    },
+    "address": "Тбилиси, ул. Пекини 34, ауд. 220; ул. Иосеба Гришашвили, 51",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/kubikrubik/",
+      "site": "https://rubik.ge"
+    },
+    "languages": [
+      "ru"
+    ],
+    "blurb": "Scratch и GameMaker, собственные проекты на ПК; районы Сабуртало и Ортачала."
+  },
+  {
+    "id": "tsikirduk_lab",
+    "title": "Лаборатория «Цикирдук» — творческая инклюзия",
+    "type": "offline",
+    "categories": [
+      "инклюзия",
+      "медиа",
+      "творчество"
+    ],
+    "age": {
+      "min": 10,
+      "max": 12
+    },
+    "address": "ул. Василия Петриашвили, 24 (Вера), Тбилиси",
+    "coords": {
+      "lat": 41.706224,
+      "lng": 44.780011
+    },
+    "links": {
+      "facebook": "https://www.facebook.com/tsikirduk/",
+      "telegram": "https://t.me/tsikirduk",
+      "instagram": "https://www.instagram.com/tsikirduk/"
+    },
+    "languages": [
+      "en",
+      "ru"
+    ],
+    "blurb": "Инклюзивная творческая студия: театр, кино, танец, арт и музыка для подростков."
+  },
+  {
+    "id": "tbilisi_maths",
+    "title": "Математика в Тбилиси — кружки",
+    "type": "offline",
+    "categories": [
+      "математика",
+      "наука",
+      "олимпиады"
+    ],
+    "age": {
+      "min": 8,
+      "max": 17
+    },
+    "address": "Тбилиси (площадки: школа Проектор; пространство «Аудитория»)",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/tbilisimaths/"
+    },
+    "languages": [
+      "ru"
+    ],
+    "blurb": "Кружки: нестандартные задачи, лингвистика, геометрия; есть группы 9–11 классов (ЕГЭ/ОГЭ)."
+  },
+  {
+    "id": "wave_music_school",
+    "title": "Музыкальная школа Wave",
+    "type": "offline",
+    "categories": [
+      "вокал",
+      "инструменты",
+      "музыка"
+    ],
+    "age": {
+      "min": 13,
+      "max": 18
+    },
+    "address": "Тбилиси, 1‑й тупик Нуцубидзе, 13",
+    "coords": null,
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/wave/"
+    },
+    "blurb": "Гитара, вокал, барабаны, перкуссия, фортепиано; концерты и мастер‑классы; комьюнити."
+  },
+  {
+    "id": "german_football_school",
+    "title": "Немецкая футбольная школа",
+    "type": "offline",
+    "categories": [
+      "командные виды",
+      "спорт",
+      "футбол"
+    ],
+    "age": {
+      "min": 5,
+      "max": 18
+    },
+    "address": "Тбилиси, ул. Димитри Узнадзе, 59",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/deutchfootball/"
+    },
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "blurb": "Европейские стандарты, тренер с лицензией Немецкого футбольного союза."
+  },
+  {
+    "id": "ok_language_center",
+    "title": "Образовательный центр «ОК» — языки",
+    "type": "offline",
+    "categories": [
+      "английский",
+      "грузинский",
+      "немецкий",
+      "русский",
+      "французский",
+      "языки",
+      "японский"
+    ],
+    "age": {
+      "min": 7,
+      "max": 18
+    },
+    "address": "Тбилиси, ул. Г. Товстоногова, 8",
+    "coords": null,
+    "links": {
+      "about": "https://findschool.ge/sections/edcenterok/",
+      "site": "https://www.educationalcenterok.com"
+    },
+    "languages": [
+      "en",
+      "ge",
+      "ru"
+    ],
+    "blurb": "Индивидуальные и групповые курсы иностранных языков для детей и взрослых."
+  },
+  {
+    "id": "pik_tbilisi",
+    "title": "Подростковый интеллектуальный клуб «Пик Тбилиси»",
+    "type": "offline",
+    "categories": [
+      "игры",
+      "интеллект",
+      "социум"
+    ],
+    "age": {
+      "min": 12,
+      "max": 16
+    },
+    "address": "Тбилиси, локации меняются",
+    "coords": null,
+    "links": {
+      "site": "https://pikclub.com",
+      "about": "https://findschool.ge/sections/pikclub/"
+    },
+    "blurb": "Еженедельные встречи для подростков 12–16: интеллектуальные игры и общение.",
+    "languages": [
+      "ru"
+    ]
+  },
+  {
+    "id": "pristan_avantyuristov",
+    "title": "Пристань авантюристов — психологические клубы",
+    "type": "offline",
+    "categories": [
+      "психология",
+      "социум",
+      "творчество"
+    ],
+    "age": {
+      "min": 10,
+      "max": 18
+    },
+    "address": "ул. Иосеба Гришашвили, 51, Тбилиси",
+    "coords": {
+      "lat": 41.685285,
+      "lng": 44.818531
+    },
+    "links": {
+      "about": "https://findschool.ge/sections/adventure/"
+    },
+    "languages": [
+      "ru"
+    ],
+    "blurb": "Подростковый клуб, сторителлинг, клуб путешественников, игры Go и творческие мастерские."
+  },
+  {
+    "id": "aurora_ballet",
+    "title": "Студия балета «Aurora»",
+    "type": "offline",
+    "categories": [
+      "балет",
+      "танцы",
+      "творчество"
+    ],
+    "age": {
+      "min": 10,
+      "max": 18
+    },
+    "address": "Тбилиси, ул. Арчил Цагарели, 82",
+    "coords": null,
+    "languages": [
+      "ge",
+      "ru"
+    ],
+    "links": {
+      "about": "https://findschool.ge/sections/aurora/",
+      "site": "https://balletstudio.ge"
+    },
+    "blurb": "Классическая хореография: развитие пластики, координации и сценической культуры."
+  },
+  {
+    "id": "teatr_na_vesu",
+    "title": "Театр «На весу» — актёрские курсы",
+    "type": "offline",
+    "categories": [
+      "социум",
+      "творчество",
+      "театр"
+    ],
+    "age": {
+      "min": 12,
+      "max": 18
+    },
+    "address": "1-й пер. Абано, 13, Тбилиси",
+    "coords": {
+      "lat": 41.687326,
+      "lng": 44.810518
+    },
+    "links": {
+      "about": "https://teatr.ge/semidnevnyj-teatralnyj-trening-v-sochi/"
+    },
+    "blurb": "Курсы актёрского мастерства: фантазия, пластика, голос, основы драматургии.",
+    "languages": [
+      "ru"
+    ]
+  },
+  {
+    "id": "azbuka_culture_center",
+    "title": "Центр \"Азбука\" — русский язык и кружки",
+    "type": "offline",
+    "categories": [
+      "русский",
+      "социум",
+      "творчество",
+      "языки"
+    ],
+    "age": {
+      "min": 12,
+      "max": 18
+    },
+    "address": "ул. Бесики, 4, Тбилиси",
+    "coords": {
+      "lat": 41.688895,
+      "lng": 44.772052
+    },
+    "links": {
+      "site": "https://azbuka.ge",
+      "about": "https://azbuka.ge/yazykovye-kursy.html"
+    },
+    "blurb": "Курсы и мероприятия для подростков, мастер‑классы и языковые программы.",
+    "languages": [
+      "ru"
+    ]
+  }
+]
