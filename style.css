@@ -533,6 +533,21 @@ footer small {
   gap: 8px;
   font-weight: 700;
 }
+
+/* Force-remove underline on the footer CTA in all states (cross-browser) */
+.footer-actions a.chip,
+.footer-actions a.chip:link,
+.footer-actions a.chip:visited,
+.footer-actions a.chip:hover,
+.footer-actions a.chip:active,
+.footer-actions a.chip:focus {
+  text-decoration: none !important;
+  -webkit-text-decoration: none !important;
+  text-decoration-color: transparent !important;
+  text-underline-offset: 0 !important;
+  text-decoration-thickness: 0 !important;
+  text-decoration-skip-ink: none !important;
+}
 /* Modern Toggle Switch */
 .switch {
   position: relative;
