@@ -3,6 +3,7 @@ let ITEMS = [];
 let map, clusterer, userPos = null;
 let favoritesFilterActive = false; // Track favorites filter state
 const THEME_KEY = 'theme';
+const REBEL_KEY = 'rebel_mode';
 
 function applyTheme(theme) {
   const safeTheme = theme === 'light' ? 'light' : 'dark';
@@ -468,6 +469,7 @@ setTimeout(() => {
 
 // Initialize theme as soon as possible
 document.addEventListener('DOMContentLoaded', initTheme);
+document.addEventListener('DOMContentLoaded', initRebelMode);
 
 
 function showItemOnMap(item) {
@@ -495,4 +497,49 @@ function updateListMetaVisible() {
   const all = ITEMS.length;
   const visible = [...document.querySelectorAll('#list .card')].filter(el => el.style.display !== 'none').length;
   metaEl.textContent = `Показано ${visible} из ${all}`;
+}
+
+function applyRebelMode(isOn) {
+  const root = document.documentElement;
+  if (isOn) {
+    root.classList.add('rebel');
+  } else {
+    root.classList.remove('rebel');
+  }
+  const btn = document.getElementById('rebelToggle');
+  if (btn) btn.setAttribute('aria-pressed', String(!!isOn));
+}
+
+function initRebelMode() {
+  try {
+    const saved = localStorage.getItem(REBEL_KEY);
+    const isOn = saved ? saved === '1' : false;
+    applyRebelMode(isOn);
+  } catch (_) {
+    applyRebelMode(false);
+  }
+  const toggleEl = document.getElementById('rebelToggle');
+  if (toggleEl) {
+    toggleEl.addEventListener('click', () => {
+      const nowOn = !(document.documentElement.classList.contains('rebel'));
+      applyRebelMode(nowOn);
+      try { localStorage.setItem(REBEL_KEY, nowOn ? '1' : '0'); } catch (_) {}
+      updateMicrocopyForRebel(nowOn);
+    });
+  }
+  // Initial microcopy state
+  updateMicrocopyForRebel(document.documentElement.classList.contains('rebel'));
+}
+
+function updateMicrocopyForRebel(isOn) {
+  const titleEl = document.querySelector('header h1');
+  const pEl = document.querySelector('header p');
+  if (!titleEl || !pEl) return;
+  if (isOn) {
+    titleEl.textContent = 'Найди свою тусовку. Или создай свою.';
+    pEl.textContent = 'Нормально — скучно. Лови места, комьюнити и движ, где можно быть собой, громко и без извинений.';
+  } else {
+    titleEl.textContent = 'Найди свою тусовку в Тбилиси';
+    pEl.textContent = 'Крутые секции, кружки и онлайн-сообщества для подростков 13-18 лет. Выбирай что нравится и сохраняй в избранное!';
+  }
 }
