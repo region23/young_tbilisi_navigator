@@ -170,7 +170,7 @@ h1 {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient 3s ease infinite;
+  animation: gradient 6s ease infinite;
   background-size: 200% 200%;
 }
 /* Glitchy vibe for Rebel */
@@ -508,6 +508,10 @@ main {
   overflow: hidden;
   flex-shrink: 0;
   min-height: fit-content;
+  /* Performance: skip work for off-screen cards and hint GPU */
+  content-visibility: auto;
+  contain-intrinsic-size: 280px;
+  will-change: transform, opacity;
 }
 
 .card::before {
@@ -639,6 +643,7 @@ a.btn:hover {
   transition: all 0.3s;
   position: relative;
   min-width: 36px;
+  will-change: transform, opacity;
 }
 
 .like:hover {
@@ -865,7 +870,9 @@ input:checked + .slider:before {
     radial-gradient(circle at 20% 80%, rgba(255, 110, 108, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(103, 86, 140, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 40% 40%, rgba(251, 221, 116, 0.05) 0%, transparent 50%);
-  filter: blur(100px);
+  filter: blur(60px);
+  will-change: filter;
+  transform: translateZ(0);
 }
 
 /* Header Animation */
@@ -885,6 +892,7 @@ input:checked + .slider:before {
   animation: float 20s infinite ease-in-out;
   animation-delay: var(--delay);
   opacity: 0.15;
+  will-change: transform, opacity;
 }
 
 @keyframes float {
@@ -1063,6 +1071,12 @@ input:checked + .slider:before {
 .card {
   animation: slideInUp 0.5s ease forwards;
   opacity: 0;
+}
+
+/* Disable animations after the initial mount to avoid re-animating on every filter */
+#list.no-anim .card {
+  animation: none;
+  opacity: 1;
 }
 
 /* Map Popup Styles */

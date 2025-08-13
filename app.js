@@ -5,6 +5,37 @@ let favoritesFilterActive = false; // Track favorites filter state
 const THEME_KEY = 'theme';
 const REBEL_KEY = 'rebel_mode';
 
+// Debounce helper to avoid excessive re-renders on rapid inputs
+const debounce = (fn, wait = 150) => {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), wait);
+  };
+};
+
+// Render/animation control
+let firstRender = true;
+
+// Distance caching to avoid recomputing Haversine repeatedly
+const distanceCache = new Map();
+function computeDistance(item) {
+  if (!userPos || !item.coords) return 1e9;
+  let cached = distanceCache.get(item.id);
+  if (cached == null) {
+    cached = getDistanceKm(userPos, item.coords);
+    distanceCache.set(item.id, cached);
+  }
+  return cached;
+}
+
+// Throttled pins refresh to reduce map churn
+let pinsUpdateTimer = null;
+function schedulePinsUpdate(filters, items) {
+  clearTimeout(pinsUpdateTimer);
+  pinsUpdateTimer = setTimeout(() => refreshPins(filters, items), 120);
+}
+
 function applyTheme(theme) {
   const safeTheme = theme === 'light' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', safeTheme);
@@ -37,8 +68,12 @@ async function loadItems() {
   ITEMS = data.filter(it => it.age && it.age.min <= 13);
   render();
   
-  // Initialize map after Yandex API loads
-  ymaps.ready(setupMap);
+  // Initialize map after Yandex API loads (guard if API failed to load)
+  if (window.ymaps && typeof ymaps.ready === 'function') {
+    ymaps.ready(setupMap);
+  } else {
+    console.warn('Yandex Maps API is not available; map UI will be disabled.');
+  }
 }
 
 function setupMap() {
@@ -82,6 +117,7 @@ function render(){
   if (onlineLabelEl) onlineLabelEl.classList.toggle('on', filters.onlineOnly);
   const items = applyFilters(filters);
   list.innerHTML = `<div class="list-meta" id="listMeta"></div>`;
+  const frag = document.createDocumentFragment();
   const metaEl = document.getElementById('listMeta');
   if (metaEl) metaEl.textContent = `Показано ${items.length} из ${ITEMS.length}`;
   console.log(`Rendered ${items.length} of ${ITEMS.length}`);
@@ -93,7 +129,7 @@ function render(){
     div.className = 'card';
     div.style.animationDelay = `${animationDelay}ms`;
     animationDelay += 50;
-    const dist = userPos && it.coords ? getDistanceKm(userPos, it.coords) : null;
+    const dist = userPos && it.coords ? computeDistance(it) : null;
     const km = dist!=null ? ` • ${dist.toFixed(1)} км` : '';
     const isLiked = isItemLiked(it.id);
     div.innerHTML = `
@@ -132,11 +168,15 @@ function render(){
       }
     };
     
-    list.appendChild(div);
+    frag.appendChild(div);
   });
-  refreshPins(filters, items);
+  list.appendChild(frag);
+  schedulePinsUpdate(filters, items);
   // Обновляем счётчик с учётом возможного скрытия карточек поиском
   updateListMetaVisible();
+  // Disable costly enter animations after initial render
+  list.classList.toggle('no-anim', !firstRender);
+  firstRender = false;
   hideLoadingAnimation();
 }
 
@@ -223,18 +263,10 @@ function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages}){
     res = res.filter(it => languages.some(lang => (it.languages||[]).includes(lang)));
   }
   if(userPos && dist>0){
-    res = res.filter(it => {
-      if(!it.coords) return false;
-      const d = getDistanceKm(userPos, it.coords);
-      return d!=null && d <= dist;
-    });
+    res = res.filter(it => it.coords && computeDistance(it) <= dist);
   }
   // sort by distance if available
-  res.sort((a,b)=>{
-    const da = userPos && a.coords ? getDistanceKm(userPos, a.coords) : 1e9;
-    const db = userPos && b.coords ? getDistanceKm(userPos, b.coords) : 1e9;
-    return da - db;
-  });
+  res.sort((a,b)=> computeDistance(a) - computeDistance(b));
   return res;
 }
 
@@ -385,23 +417,93 @@ function updateFavoritesCounter() {
   }
   
 }
-document.getElementById('distance').addEventListener('input', (e)=>{
+document.getElementById('distance').addEventListener('input', debounce((e)=>{
   const v = Number(e.target.value);
   document.getElementById('distLabel').textContent = v ? `${v} км от меня` : 'весь город';
   render();
-});
-document.getElementById('geoBtn').addEventListener('click', (e)=>{
+}, 150));
+
+async function tryYandexGeolocation() {
+  if (!window.ymaps || !ymaps.geolocation) return null;
+  try {
+    const result = await ymaps.geolocation.get({ provider: 'auto', timeout: 8000 });
+    const first = result && result.geoObjects && result.geoObjects.get(0);
+    if (!first) return null;
+    const coords = first.geometry && first.geometry.getCoordinates && first.geometry.getCoordinates();
+    if (!coords || coords.length < 2) return null;
+    return { lat: coords[0], lng: coords[1] };
+  } catch (_) {
+    return null;
+  }
+}
+
+async function tryIpGeolocation() {
+  try {
+    const resp = await fetch('https://ipapi.co/json/', { cache: 'no-store' });
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    const lat = (data && (data.latitude ?? (data.loc ? Number(String(data.loc).split(',')[0]) : null)));
+    const lng = (data && (data.longitude ?? (data.loc ? Number(String(data.loc).split(',')[1]) : null)));
+    if (typeof lat === 'number' && typeof lng === 'number' && !Number.isNaN(lat) && !Number.isNaN(lng)) {
+      return { lat, lng };
+    }
+    return null;
+  } catch (_) {
+    return null;
+  }
+}
+document.getElementById('geoBtn').addEventListener('click', async (e)=>{
   const btn = e.currentTarget;
   btn.classList.add('loading');
   btn.disabled = true;
-  const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-  if (!('geolocation' in navigator)) { alert('Геолокация недоступна в этом браузере'); return; }
+  const isLocalhost = ['localhost','127.0.0.1','::1'].includes(location.hostname);
+  if (!('geolocation' in navigator)) {
+    // Try fallbacks immediately if Geolocation API is not present
+    const yx = await tryYandexGeolocation();
+    if (yx) {
+      userPos = yx;
+      distanceCache.clear();
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      btn.innerHTML = '<span>✓ Локация (прибл.)</span>';
+      showNotification('📍 Приблизительная локация определена по сети');
+      render();
+      if (map) { map.setCenter([userPos.lat, userPos.lng], 13); }
+      return;
+    }
+    const ip = await tryIpGeolocation();
+    if (ip) {
+      userPos = ip;
+      distanceCache.clear();
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      btn.innerHTML = '<span>✓ Локация (IP)</span>';
+      showNotification('📍 Приблизительная локация определена по IP');
+      render();
+      if (map) { map.setCenter([userPos.lat, userPos.lng], 12); }
+      return;
+    }
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    alert('Геолокация недоступна в этом браузере');
+    return;
+  }
   if (!window.isSecureContext && !isLocalhost) {
+    btn.classList.remove('loading');
+    btn.disabled = false;
     alert('Для определения местоположения открой сайт по HTTPS или запусти локально (localhost).');
     return;
   }
-  navigator.geolocation.getCurrentPosition(pos=>{
+  try {
+    const pos = await new Promise((resolve, reject) =>
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: false,
+        timeout: 15000,
+        maximumAge: 300000
+      })
+    );
     userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+    distanceCache.clear();
     btn.classList.remove('loading');
     btn.disabled = false;
     btn.innerHTML = '<span>✓ Локация найдена</span>';
@@ -410,17 +512,41 @@ document.getElementById('geoBtn').addEventListener('click', (e)=>{
     if (map) {
       map.setCenter([userPos.lat, userPos.lng], 14);
     }
-  }, err=>{
+  } catch (err) {
+    const yx = await tryYandexGeolocation();
+    if (yx) {
+      userPos = yx;
+      distanceCache.clear();
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      btn.innerHTML = '<span>✓ Локация (прибл.)</span>';
+      showNotification('📍 Приблизительная локация определена по сети');
+      render();
+      if (map) { map.setCenter([userPos.lat, userPos.lng], 13); }
+      return;
+    }
+    const ip = await tryIpGeolocation();
+    if (ip) {
+      userPos = ip;
+      distanceCache.clear();
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      btn.innerHTML = '<span>✓ Локация (IP)</span>';
+      showNotification('📍 Приблизительная локация определена по IP');
+      render();
+      if (map) { map.setCenter([userPos.lat, userPos.lng], 12); }
+      return;
+    }
     btn.classList.remove('loading');
     btn.disabled = false;
     let msg = 'Не получилось определить местоположение.';
     if (err && typeof err.code === 'number') {
       if (err.code === err.PERMISSION_DENIED) msg = 'Доступ к геолокации запрещён. Разреши доступ в настройках сайта/браузера.';
-      else if (err.code === err.POSITION_UNAVAILABLE) msg = 'Источник геолокации недоступен. Попробуй включить GPS/интернет.';
+      else if (err.code === err.POSITION_UNAVAILABLE) msg = 'Не удалось определить позицию. На десктопах помогает включить Wi‑Fi (даже при Ethernet) и отключить VPN.';
       else if (err.code === err.TIMEOUT) msg = 'Геолокация не успела определить позицию. Попробуй ещё раз.';
     }
     alert(msg);
-  }, { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 });
+  }
 });
 document.querySelectorAll('.chip').forEach(btn=>{
   btn.addEventListener('click', ()=>{ 
@@ -439,10 +565,10 @@ function addSearchBar() {
   `;
   filters.insertBefore(searchContainer, filters.firstChild);
   
-  document.getElementById('searchInput').addEventListener('input', (e) => {
+  document.getElementById('searchInput').addEventListener('input', debounce((e) => {
     const searchTerm = e.target.value.toLowerCase();
     filterBySearch(searchTerm);
-  });
+  }, 120));
 }
 
 function filterBySearch(searchTerm) {
