@@ -15,8 +15,7 @@ function applyTheme(theme) {
 function initTheme() {
   try {
     const saved = localStorage.getItem(THEME_KEY);
-    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-    const theme = saved || (prefersLight ? 'light' : 'dark');
+    const theme = saved || 'dark';
     applyTheme(theme);
   } catch (_) {
     applyTheme('dark');
@@ -513,10 +512,10 @@ function applyRebelMode(isOn) {
 function initRebelMode() {
   try {
     const saved = localStorage.getItem(REBEL_KEY);
-    const isOn = saved ? saved === '1' : false;
+    const isOn = saved ? saved === '1' : true;
     applyRebelMode(isOn);
   } catch (_) {
-    applyRebelMode(false);
+    applyRebelMode(true);
   }
   const toggleEl = document.getElementById('rebelToggle');
   if (toggleEl) {
