@@ -72,11 +72,12 @@ async function loadItems() {
   if (window.ymaps && typeof ymaps.ready === 'function') {
     ymaps.ready(setupMap);
   } else {
-    console.warn('Yandex Maps API is not available; map UI will be disabled.');
+    initMapWhenReady();
   }
 }
 
 function setupMap() {
+  if (map) return;
   // Инициализируем Яндекс.Карту
   map = new ymaps.Map('map', {
     center: [41.715, 44.79], // Тбилиси [lat, lng]
@@ -584,8 +585,71 @@ function filterBySearch(searchTerm) {
   updateListMetaVisible();
 }
 
+// Robust Yandex Maps loader with retry and polling
+function initMapWhenReady() {
+  if (window.__ymLoaderInit) return; // idempotent
+  window.__ymLoaderInit = true;
+
+  const tryInit = () => {
+    if (window.ymaps && typeof ymaps.ready === 'function') {
+      ymaps.ready(setupMap);
+      return true;
+    }
+    return false;
+  };
+
+  if (tryInit()) return;
+
+  const ymScript = document.querySelector('script[src*="api-maps.yandex.ru"]');
+  let fallbackTimer = null;
+
+  if (ymScript) {
+    const onLoad = () => {
+      clearTimeout(fallbackTimer);
+      tryInit();
+    };
+    const onError = () => {
+      clearTimeout(fallbackTimer);
+      console.warn('Yandex Maps API failed to load; retrying shortly...');
+      setTimeout(() => {
+        if (!document.querySelector('script[src*="api-maps.yandex.ru"][data-retry="1"]')) {
+          const s = document.createElement('script');
+          s.src = ymScript.src;
+          s.defer = true;
+          s.setAttribute('data-retry', '1');
+          s.onload = tryInit;
+          s.onerror = () => console.warn('Yandex Maps API second attempt failed.');
+          document.head.appendChild(s);
+        }
+      }, 2000);
+    };
+
+    ymScript.addEventListener('load', onLoad, { once: true });
+    ymScript.addEventListener('error', onError, { once: true });
+
+    // Fallback: if neither load nor error fired, try a single duplicate after delay
+    fallbackTimer = setTimeout(() => {
+      if (!window.ymaps && !document.querySelector('script[src*="api-maps.yandex.ru"][data-retry="1"]')) {
+        const s = document.createElement('script');
+        s.src = ymScript.src;
+        s.defer = true;
+        s.setAttribute('data-retry', '1');
+        s.onload = tryInit;
+        document.head.appendChild(s);
+      }
+    }, 2500);
+  }
+
+  // Safety polling to catch when ymaps becomes available
+  let checks = 0;
+  const id = setInterval(() => {
+    if (tryInit() || ++checks > 50) clearInterval(id);
+  }, 200);
+}
+
 // Initialize
 loadItems();
+initMapWhenReady();
 setTimeout(addSearchBar, 100);
 setTimeout(() => {
   updateFavoritesCounter();
