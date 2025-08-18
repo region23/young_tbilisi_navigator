@@ -12,7 +12,7 @@
       "min": 5,
       "max": 18
     },
-    "address": "",
+    "address": "Тбилиси",
     "coords": {    },
     "links": {
       "facebook": "https://www.facebook.com/eka.maisuradze.3511",
@@ -618,7 +618,7 @@
     "coords": null,
     "links": {
       "about": "https://findschool.ge/sections/leviosa/",
-      "facebook": "https://www.facebook.com/leviosamovelab",
+      "facebook": "https://www.facebook.com/leviosamovelab"
     },
     "languages": [
       "ge",

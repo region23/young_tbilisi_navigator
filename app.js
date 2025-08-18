@@ -5,6 +5,25 @@ let favoritesFilterActive = false; // Track favorites filter state
 const THEME_KEY = 'theme';
 const REBEL_KEY = 'rebel_mode';
 
+// Gamification system
+let userStats = {
+  placesViewed: 0,
+  categoriesExplored: new Set(),
+  achievementsUnlocked: new Set(),
+  sessionStartTime: Date.now()
+};
+
+const ACHIEVEMENTS = {
+  'explorer': { name: 'Исследователь', desc: 'Посмотрел 10+ мест', emoji: '🔍', threshold: 10 },
+  'social': { name: 'Общительный', desc: 'Изучил места для знакомств', emoji: '🦋', categories: ['социум'] },
+  'creative': { name: 'Креативный', desc: 'Нашел творческие активности', emoji: '🎨', categories: ['творчество'] },
+  'gamer': { name: 'Геймер', desc: 'Обнаружил игровые тусовки', emoji: '🎮', categories: ['игры'] },
+  'polyglot': { name: 'Полиглот', desc: 'Заинтересовался языками', emoji: '🗣️', categories: ['языки'] },
+  'athlete': { name: 'Атлет', desc: 'Выбрал активный образ жизни', emoji: '💪', categories: ['спорт'] },
+  'first_like': { name: 'Первый лайк', desc: 'Добавил место в избранное', emoji: '💖', threshold: 1 },
+  'collector': { name: 'Коллекционер', desc: 'Собрал 5+ лайков', emoji: '⭐', threshold: 5 }
+};
+
 // Debounce helper to avoid excessive re-renders on rapid inputs
 const debounce = (fn, wait = 150) => {
   let timeoutId;
@@ -64,8 +83,24 @@ function initTheme() {
 async function loadItems() {
   const res = await fetch('data/items.json');
   const data = await res.json();
-  // ensure only 13+
-  ITEMS = data.filter(it => it.age && it.age.min <= 13);
+  // Teen-safe: include only activities overlapping with 13–18 or explicitly tagged as teen
+  ITEMS = data.filter(it => {
+    const age = it.age || {};
+    const min = Number.isFinite(age.min) ? age.min : null;
+    const max = Number.isFinite(age.max) ? age.max : null;
+    const overlapsTeen = (min === null && max === null) ? false : ((min ?? -Infinity) <= 18 && (max ?? Infinity) >= 13);
+    const teenTag = (it.categories || []).some(c => /подрост|teen|тин/i.test(String(c)));
+    return overlapsTeen || teenTag;
+  });
+  // Precompute normalized fields for faster filtering
+  ITEMS.forEach(it => {
+    const normCategories = (it.categories || []).map(x => String(x).toLowerCase());
+    it._normCategories = normCategories;
+    const title = it.title ? String(it.title) : '';
+    const blurb = it.blurb ? String(it.blurb) : '';
+    it._normText = [title, blurb, ...normCategories].filter(Boolean).join(' ').toLowerCase();
+  });
+  console.log(`Loaded ${ITEMS.length} teen-friendly from ${data.length} total`);
   render();
   
   // Initialize map after Yandex API loads (guard if API failed to load)
@@ -74,6 +109,11 @@ async function loadItems() {
   } else {
     initMapWhenReady();
   }
+
+  // Dispatch custom event so dynamic chips can be built
+  try {
+    document.dispatchEvent(new Event('itemsLoaded'));
+  } catch (_) {}
 }
 
 function setupMap() {
@@ -117,6 +157,10 @@ function render(){
   const onlineLabelEl = document.querySelector('.switch-label');
   if (onlineLabelEl) onlineLabelEl.classList.toggle('on', filters.onlineOnly);
   const items = applyFilters(filters);
+  const chipsContainer = document.getElementById('categoryChips');
+  if (chipsContainer && !chipsContainer.children.length) {
+    try { buildCategoryChips(); } catch (_) {}
+  }
   list.innerHTML = `<div class="list-meta" id="listMeta"></div>`;
   const frag = document.createDocumentFragment();
   const metaEl = document.getElementById('listMeta');
@@ -136,12 +180,12 @@ function render(){
     div.innerHTML = `
       <div class="card-header">
         <strong>${it.title}</strong>
-        ${index < 3 ? '<span class="hot-badge">🔥 HOT</span>' : ''}
+        ${index < 3 ? '<span class="hot-badge">🔥 Популярно</span>' : ''}
       </div>
       <div class="card-description">${it.blurb}</div>
       <div class="badges">
         <span class="badge ${it.type==='online'?'badge-online':'badge-offline'}">
-          ${it.type==='online'?'🌐 Онлайн':'📍 Оффлайн'}
+          ${it.type==='online'?'🌐 Онлайн':'📍 Офлайн'}
         </span>
         <span class="badge badge-age">🎂 ${it.age.min}–${it.age.max} лет</span>
         ${renderLanguages(it.languages)}
@@ -157,13 +201,20 @@ function render(){
     `;
     div.querySelector('.like').onclick = (e) => {
       e.stopPropagation();
+      const wasLiked = e.target.classList.contains('liked');
       toggleLike(it.id);
       e.target.classList.toggle('liked');
       e.target.textContent = e.target.classList.contains('liked') ? '♥' : '♡';
+      
+      // Track gamification
+      trackFavoriteToggle(!wasLiked);
     };
     
     // Add click handler to show location on map
     div.onclick = () => {
+      // Track place view for gamification
+      trackPlaceView(it);
+      
       if (it.coords) {
         showItemOnMap(it);
       }
@@ -242,12 +293,46 @@ function getFilters(){
   const dist = Number(document.getElementById('distance').value);
   const chips = [...document.querySelectorAll('.chip.active[data-tag]')].map(x=>x.dataset.tag);
   const languages = [...document.querySelectorAll('.chip.active[data-language]')].map(x=>x.dataset.language);
+  const vibes = [...document.querySelectorAll('.personality-chip.active[data-vibe]')].map(x=>x.dataset.vibe);
   
-  
-  return { onlineOnly, favoritesOnly, dist, chips, languages };
+  return { onlineOnly, favoritesOnly, dist, chips, languages, vibes };
 }
 
-function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages}){
+// Mapping of activity categories to personality vibes
+const VIBE_MAPPING = {
+  'introvert': ['программирование', 'it', 'искусство', 'студия', 'рисование', 'творчество', 'minecraft', 'roblox', 'чтение', 'музыка', 'шахматы', 'манга', 'аниме'],
+  'extrovert': ['танцы', 'театр', 'хип-хоп', 'концерт', 'фестиваль', 'публичные', 'команда', 'групповые', 'вечеринка', 'социум', 'общение', 'косплей', 'alt'],
+  'chill': ['йога', 'медитация', 'релакс', 'спа', 'массаж', 'природа', 'кафе', 'чай', 'прогулки', 'здоровье', 'лоуфай', 'lofi'],
+  'active': ['спорт', 'фитнес', 'плавание', 'мма', 'бег', 'велосипед', 'активные', 'экстрим', 'туризм', 'games', 'игры']
+};
+
+// Zones: normalized groups for categories (Option B)
+const ZONES = [
+  { id: 'общение', label: 'Общение и друзья', emoji: '✨', synonyms: ['социум', 'общение', 'друзья', 'клуб', 'комьюнити', 'community'] },
+  { id: 'спорт', label: 'Спорт и актив', emoji: '🔥', synonyms: ['спорт', 'фитнес', 'актив', 'тренировка', 'плавание', 'мма', 'бег', 'велосипед', 'туризм', 'поход'] },
+  { id: 'игры', label: 'Гейминг', emoji: '🎮', synonyms: ['игры', 'game', 'games', 'гейминг', 'киберспорт', 'шахматы', 'minecraft', 'roblox'] },
+  { id: 'творчество', label: 'Творчество', emoji: '🎨', synonyms: ['творчество', 'искусство', 'рисование', 'скетч', 'фото', 'видео', 'дизайн', 'керамика', 'театр', 'сцена', 'аниме', 'anime', 'косплей', 'cosplay', 'манга', 'manga'] },
+  { id: 'языки', label: 'Языки', emoji: '🗣️', synonyms: ['языки', 'язык', 'английский', 'english', 'ქართული', 'georgian', 'грузинский', 'русский', 'speaking', 'разговорный'] },
+  { id: 'it', label: 'IT и код', emoji: '👾', synonyms: ['программирование', 'it', 'код', 'coding', 'разработка', 'python', 'javascript', 'робототехника', 'робotics'] },
+  { id: 'танцы', label: 'Танцы', emoji: '💃', synonyms: ['танцы', 'dance', 'хип-хоп', 'hip-hop', 'k-pop'] },
+  { id: 'музыка', label: 'Музыка', emoji: '🎵', synonyms: ['музыка', 'вокал', 'гитара', 'фортепиано', 'dj', 'битмейкинг'] },
+  { id: 'природа', label: 'Природа и прогулки', emoji: '🌿', synonyms: ['природа', 'прогулки', 'хайкинг', 'парк', 'поход', 'скалолазание'] },
+];
+
+const ZONE_BY_ID = Object.fromEntries(ZONES.map(z => [z.id, z]));
+// Precomputed lowercased lookups to avoid repeated toLowerCase and joins during filtering
+const VIBE_KEYWORDS_LOWER = Object.fromEntries(
+  Object.entries(VIBE_MAPPING).map(([k, arr]) => [k, arr.map(s => String(s).toLowerCase())])
+);
+const ZONE_SYNONYMS_LOWER = Object.fromEntries(
+  ZONES.map(z => {
+    const idLower = String(z.id).toLowerCase();
+    const synonymsLower = [idLower, ...(z.synonyms || [])].map(s => String(s).toLowerCase());
+    return [idLower, synonymsLower];
+  })
+);
+
+function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages, vibes}){
   let res = ITEMS.slice();
   
   if(onlineOnly){
@@ -258,10 +343,30 @@ function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages}){
     res = res.filter(it => likedIds.has(it.id));
   }
   if(chips.length){
-    res = res.filter(it => chips.some(tag => (it.categories||[]).some(c=>c.includes(tag))));
+    res = res.filter(it => {
+      const categories = it._normCategories || (it.categories || []).map(x => String(x).toLowerCase());
+      return chips.some(zoneId => {
+        const zoneIdLower = String(zoneId).toLowerCase();
+        const synonyms = ZONE_SYNONYMS_LOWER[zoneIdLower];
+        if (!synonyms) return false;
+        return categories.some(c => synonyms.some(s => c.includes(s)));
+      });
+    });
   }
   if(languages.length){
     res = res.filter(it => languages.some(lang => (it.languages||[]).includes(lang)));
+  }
+  if(vibes.length){
+    console.log('Filtering by vibes:', vibes);
+    res = res.filter(it => {
+      const text = it._normText || ((it.categories || []).concat([it.title, it.blurb]).join(' ').toLowerCase());
+      const matches = vibes.some(vibe => {
+        const keywords = VIBE_KEYWORDS_LOWER[vibe] || [];
+        return keywords.some(keyword => text.includes(keyword));
+      });
+      return matches;
+    });
+    console.log('Items after vibe filter:', res.length);
   }
   if(userPos && dist>0){
     res = res.filter(it => it.coords && computeDistance(it) <= dist);
@@ -294,7 +399,7 @@ function refreshPins(filters, items = null) {
           <div style="margin: 8px 0;">
             ${renderLanguages(it.languages)}
             <span class="badge ${it.type === 'online' ? 'badge-online' : 'badge-offline'}">
-              ${it.type === 'online' ? '🌐 Онлайн' : '📍 Оффлайн'}
+              ${it.type === 'online' ? '🌐 Онлайн' : '📍 Офлайн'}
             </span>
           </div>
           <div style="margin: 4px 0; color: #666;">
@@ -453,6 +558,46 @@ async function tryIpGeolocation() {
     return null;
   }
 }
+
+async function getPositionRobust() {
+  try {
+    return await new Promise((resolve, reject) =>
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: false,
+        timeout: 30000,
+        maximumAge: 0
+      })
+    );
+  } catch (e) {
+    if (e && typeof e.code === 'number' && e.code === e.PERMISSION_DENIED) throw e;
+  }
+  try {
+    return await new Promise((resolve, reject) =>
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 30000,
+        maximumAge: 0
+      })
+    );
+  } catch (_) {}
+  return await new Promise((resolve, reject) => {
+    const id = navigator.geolocation.watchPosition(
+      p => {
+        navigator.geolocation.clearWatch(id);
+        resolve(p);
+      },
+      err => {
+        navigator.geolocation.clearWatch(id);
+        reject(err);
+      },
+      { enableHighAccuracy: true, maximumAge: 0 }
+    );
+    setTimeout(() => {
+      navigator.geolocation.clearWatch(id);
+      reject(new Error('watch timeout'));
+    }, 45000);
+  });
+}
 document.getElementById('geoBtn').addEventListener('click', async (e)=>{
   const btn = e.currentTarget;
   btn.classList.add('loading');
@@ -496,13 +641,7 @@ document.getElementById('geoBtn').addEventListener('click', async (e)=>{
     return;
   }
   try {
-    const pos = await new Promise((resolve, reject) =>
-      navigator.geolocation.getCurrentPosition(resolve, reject, {
-        enableHighAccuracy: false,
-        timeout: 15000,
-        maximumAge: 300000
-      })
-    );
+    const pos = await getPositionRobust();
     userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
     distanceCache.clear();
     btn.classList.remove('loading');
@@ -543,17 +682,11 @@ document.getElementById('geoBtn').addEventListener('click', async (e)=>{
     let msg = 'Не получилось определить местоположение.';
     if (err && typeof err.code === 'number') {
       if (err.code === err.PERMISSION_DENIED) msg = 'Доступ к геолокации запрещён. Разреши доступ в настройках сайта/браузера.';
-      else if (err.code === err.POSITION_UNAVAILABLE) msg = 'Не удалось определить позицию. На десктопах помогает включить Wi‑Fi (даже при Ethernet) и отключить VPN.';
+      else if (err.code === err.POSITION_UNAVAILABLE) msg = 'Система не смогла получить координаты (на iOS/macOS это часто kCLErrorLocationUnknown). Включи Wi‑Fi (даже при Ethernet), отключи VPN/Private Relay, включи точную геопозицию и подожди минуту.';
       else if (err.code === err.TIMEOUT) msg = 'Геолокация не успела определить позицию. Попробуй ещё раз.';
     }
     alert(msg);
   }
-});
-document.querySelectorAll('.chip').forEach(btn=>{
-  btn.addEventListener('click', ()=>{ 
-    btn.classList.toggle('active'); 
-    render(); 
-  });
 });
 
 // Add search functionality
@@ -647,18 +780,117 @@ function initMapWhenReady() {
   }, 200);
 }
 
-// Initialize
-loadItems();
+// Initialize map readiness polling
 initMapWhenReady();
-setTimeout(addSearchBar, 100);
-setTimeout(() => {
-  updateFavoritesCounter();
-  initializeFavoritesButton();
-}, 200);
+
+// Add all chip handlers and other interactive elements
+function initChipHandlers() {
+  document.addEventListener('click', (e) => {
+    // Handle personality chips (vibe filters) - radio button behavior
+    if (e.target.matches('.personality-chip')) {
+      console.log('Personality chip clicked:', e.target.dataset.vibe);
+      
+      const wasActive = e.target.classList.contains('active');
+      
+      // If clicking an active button, deactivate it
+      if (wasActive) {
+        e.target.classList.remove('active');
+      } else {
+        // Deactivate all other personality chips first
+        document.querySelectorAll('.personality-chip.active').forEach(chip => {
+          chip.classList.remove('active');
+        });
+        // Activate the clicked one
+        e.target.classList.add('active');
+        
+        // Show encouraging message
+        const vibe = e.target.dataset.vibe;
+        const messages = {
+          'introvert': 'Подобрали спокойные варианты 🌙',
+          'extrovert': 'Покажем активные варианты 🌟',
+          'chill': 'Больше спокойных мест 🌊',
+          'active': 'Больше движения ⚡'
+        };
+        
+        if (messages[vibe]) {
+          setTimeout(() => showMotivationalMessage(messages[vibe]), 300);
+        }
+      }
+      
+      // Re-render with new filters
+      render();
+    }
+    
+    // Handle category chips (data-tag)
+    if (e.target.matches('.chip[data-tag]') && !e.target.matches('.personality-chip')) {
+      e.target.classList.toggle('active');
+      render();
+      
+      // Track gamification
+      const category = e.target.dataset.tag;
+      if (category) {
+        userStats.categoriesExplored.add(category);
+        checkAchievements();
+      }
+    }
+    
+    // Handle language chips (data-language)
+    if (e.target.matches('.chip[data-language]')) {
+      e.target.classList.toggle('active');
+      render();
+    }
+  });
+  
+  // Add other control handlers
+  const onlineToggle = document.getElementById('onlineToggle');
+  if (onlineToggle) {
+    onlineToggle.addEventListener('change', () => {
+      render();
+    });
+  }
+  
+  const distanceSlider = document.getElementById('distance');
+  if (distanceSlider) {
+    distanceSlider.addEventListener('input', debounce(() => {
+      const val = Number(distanceSlider.value);
+      const label = document.getElementById('distLabel');
+      if (label) {
+        label.textContent = val === 0 ? 'везде' : `${val} км`;
+      }
+      render();
+    }, 300));
+  }
+}
 
 // Initialize theme as soon as possible
 document.addEventListener('DOMContentLoaded', initTheme);
 document.addEventListener('DOMContentLoaded', initRebelMode);
+document.addEventListener('DOMContentLoaded', initChipHandlers);
+document.addEventListener('DOMContentLoaded', () => {
+  // Load items and initialize UI
+  loadItems();
+  setTimeout(addSearchBar, 100);
+  setTimeout(() => {
+    updateFavoritesCounter();
+    initializeFavoritesButton();
+  }, 200);
+  // Build dynamic category chips after items load
+  document.addEventListener('itemsLoaded', () => {
+    buildCategoryChips();
+  });
+  
+  // Show welcome message for first-time users
+  setTimeout(() => {
+    if (userStats.placesViewed === 0) {
+      showMotivationalMessage('Привет! Посмотрим, что тебе понравится ✨');
+    }
+  }, 2000);
+  
+  // Update achievement display periodically
+  setInterval(() => {
+    updateAchievementDisplay();
+  }, 5000);
+});
 
 
 function showItemOnMap(item) {
@@ -669,15 +901,8 @@ function showItemOnMap(item) {
     duration: 800
   });
   
-  // Находим соответствующий маркер и открываем его балун
-  setTimeout(() => {
-    clusterer.each((placemark) => {
-      if (placemark.properties.get('item') && placemark.properties.get('item').id === item.id) {
-        placemark.balloon.open();
-        return false; // прерываем цикл
-      }
-    });
-  }, 400);
+  // Auto-opening balloons disabled due to Yandex Maps API issues
+  // Users can click on pins to see details
 }
 
 function updateListMetaVisible() {
@@ -688,6 +913,22 @@ function updateListMetaVisible() {
   metaEl.textContent = `Показано ${visible} из ${all}`;
 }
 
+function buildCategoryChips() {
+  const container = document.getElementById('categoryChips');
+  if (!container) return;
+  container.innerHTML = '';
+  // Build normalized zone chips
+  const frag = document.createDocumentFragment();
+  ZONES.forEach(z => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.setAttribute('data-tag', z.id);
+    btn.textContent = `${z.emoji} ${z.label}`;
+    frag.appendChild(btn);
+  });
+  container.appendChild(frag);
+}
+
 function applyRebelMode(isOn) {
   const root = document.documentElement;
   if (isOn) {
@@ -696,7 +937,11 @@ function applyRebelMode(isOn) {
     root.classList.remove('rebel');
   }
   const btn = document.getElementById('rebelToggle');
-  if (btn) btn.setAttribute('aria-pressed', String(!!isOn));
+  if (btn) {
+    btn.setAttribute('aria-pressed', String(!!isOn));
+    const span = btn.querySelector('span');
+    if (span) span.textContent = isOn ? 'ALT MODE' : 'ANIME';
+  }
 }
 
 function initRebelMode() {
@@ -724,11 +969,135 @@ function updateMicrocopyForRebel(isOn) {
   const titleEl = document.querySelector('header h1');
   const pEl = document.querySelector('header p');
   if (!titleEl || !pEl) return;
+  titleEl.textContent = 'Найди друзей по интересам в Тбилиси ✨';
   if (isOn) {
-    titleEl.textContent = 'Найди свою тусовку. Или создай свою.';
-    pEl.textContent = 'Нормально — скучно. Лови места, комьюнити и движ, где можно быть собой, громко и без извинений.';
+    pEl.textContent = 'Альт‑режим включён. Выбирай, что нравится — сохраняй избранное и знакомься.';
   } else {
-    titleEl.textContent = 'Найди свою тусовку в Тбилиси';
-    pEl.textContent = 'Крутые секции, кружки и онлайн-сообщества для подростков 13-18 лет. Выбирай что нравится и сохраняй в избранное!';
+    pEl.textContent = 'Выбирай, что нравится. Сохраняй избранное и знакомься в безопасных местах.';
   }
+}
+
+// Gamification functions
+function trackPlaceView(item) {
+  userStats.placesViewed++;
+  if (item.categories) {
+    item.categories.forEach(cat => userStats.categoriesExplored.add(cat));
+  }
+  
+  checkAchievements();
+  updateStatsDisplay();
+}
+
+function trackFavoriteToggle(isAdding) {
+  if (isAdding) {
+    checkAchievements();
+  }
+}
+
+function checkAchievements() {
+  const newAchievements = [];
+  
+  // Explorer achievement
+  if (userStats.placesViewed >= ACHIEVEMENTS.explorer.threshold && !userStats.achievementsUnlocked.has('explorer')) {
+    newAchievements.push('explorer');
+  }
+  
+  // Category-based achievements
+  ['social', 'creative', 'gamer', 'polyglot', 'athlete'].forEach(achievementKey => {
+    const achievement = ACHIEVEMENTS[achievementKey];
+    if (achievement.categories && !userStats.achievementsUnlocked.has(achievementKey)) {
+      const hasCategory = achievement.categories.some(cat => userStats.categoriesExplored.has(cat));
+      if (hasCategory) {
+        newAchievements.push(achievementKey);
+      }
+    }
+  });
+  
+  // Favorites-based achievements
+  const favCount = getFavoritesCount();
+  if (favCount >= 1 && !userStats.achievementsUnlocked.has('first_like')) {
+    newAchievements.push('first_like');
+  }
+  if (favCount >= 5 && !userStats.achievementsUnlocked.has('collector')) {
+    newAchievements.push('collector');
+  }
+  
+  newAchievements.forEach(key => {
+    userStats.achievementsUnlocked.add(key);
+    showAchievementPopup(ACHIEVEMENTS[key]);
+  });
+}
+
+function showAchievementPopup(achievement) {
+  const popup = document.createElement('div');
+  popup.className = 'achievement-popup';
+  popup.innerHTML = `${achievement.emoji} <strong>${achievement.name}</strong><br><small>${achievement.desc}</small>`;
+  
+  document.body.appendChild(popup);
+  
+  setTimeout(() => popup.classList.add('show'), 100);
+  setTimeout(() => {
+    popup.classList.remove('show');
+    setTimeout(() => popup.remove(), 500);
+  }, 3000);
+}
+
+function getFavoritesCount() {
+  try {
+    const arr = JSON.parse(localStorage.getItem('liked_ids') || '[]');
+    return Array.isArray(arr) ? arr.length : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function updateStatsDisplay() {
+  // Show motivational messages
+  const messages = [
+    'Продолжай в том же духе! 🌟',
+    'Ты на правильном пути! ✨',
+    'Скоро найдешь что-то классное! 🔥',
+    'Исследуй больше, найди свое! 💎',
+    'Каждое место - новая возможность! 🚀'
+  ];
+  
+  if (userStats.placesViewed > 0 && userStats.placesViewed % 5 === 0) {
+    showMotivationalMessage(messages[Math.floor(Math.random() * messages.length)]);
+  }
+}
+
+function showMotivationalMessage(message) {
+  const existing = document.querySelector('.motivation-badge');
+  if (existing) existing.remove();
+  
+  const badge = document.createElement('div');
+  badge.className = 'motivation-badge';
+  badge.textContent = message;
+  
+  document.body.appendChild(badge);
+  
+  setTimeout(() => badge.classList.add('show'), 100);
+  setTimeout(() => {
+    badge.classList.remove('show');
+    setTimeout(() => badge.remove(), 500);
+  }, 2500);
+}
+
+function updateAchievementDisplay() {
+  const display = document.getElementById('achievementDisplay');
+  if (!display) return;
+  
+  if (userStats.achievementsUnlocked.size === 0) {
+    display.innerHTML = 'Исследуй сайт чтобы получить первые достижения! 🎯';
+    return;
+  }
+  
+  const achievementBadges = Array.from(userStats.achievementsUnlocked)
+    .map(key => {
+      const achievement = ACHIEVEMENTS[key];
+      return `<span class="achievement-badge" title="${achievement.desc}">${achievement.emoji} ${achievement.name}</span>`;
+    })
+    .join('');
+  
+  display.innerHTML = `Твои достижения: ${achievementBadges}`;
 }
