@@ -298,13 +298,20 @@ const VIBE_MAPPING = {
   'active': ['спорт', 'фитнес', 'плавание', 'мма', 'бег', 'велосипед', 'активные', 'экстрим', 'туризм', 'games', 'игры']
 };
 
-// Synonyms for tag-chip filtering (case-insensitive)
-const CHIP_SYNONYMS = {
-  'аниме': ['аниме', 'anime'],
-  'косплей': ['косплей', 'cosplay'],
-  'манга': ['манга', 'manga'],
-  'alt': ['alt', 'альт', 'альтернатив']
-};
+// Zones: normalized groups for categories (Option B)
+const ZONES = [
+  { id: 'общение', label: 'Общение и друзья', emoji: '✨', synonyms: ['социум', 'общение', 'друзья', 'клуб', 'комьюнити', 'community'] },
+  { id: 'спорт', label: 'Спорт и актив', emoji: '🔥', synonyms: ['спорт', 'фитнес', 'актив', 'тренировка', 'плавание', 'мма', 'бег', 'велосипед', 'туризм', 'поход'] },
+  { id: 'игры', label: 'Гейминг', emoji: '🎮', synonyms: ['игры', 'game', 'games', 'гейминг', 'киберспорт', 'шахматы', 'minecraft', 'roblox'] },
+  { id: 'творчество', label: 'Творчество', emoji: '🎨', synonyms: ['творчество', 'искусство', 'рисование', 'скетч', 'фото', 'видео', 'дизайн', 'керамика', 'театр', 'сцена', 'аниме', 'anime', 'косплей', 'cosplay', 'манга', 'manga'] },
+  { id: 'языки', label: 'Языки', emoji: '🗣️', synonyms: ['языки', 'язык', 'английский', 'english', 'ქართული', 'georgian', 'грузинский', 'русский', 'speaking', 'разговорный'] },
+  { id: 'it', label: 'IT и код', emoji: '👾', synonyms: ['программирование', 'it', 'код', 'coding', 'разработка', 'python', 'javascript', 'робототехника', 'робotics'] },
+  { id: 'танцы', label: 'Танцы', emoji: '💃', synonyms: ['танцы', 'dance', 'хип-хоп', 'hip-hop', 'k-pop'] },
+  { id: 'музыка', label: 'Музыка', emoji: '🎵', synonyms: ['музыка', 'вокал', 'гитара', 'фортепиано', 'dj', 'битмейкинг'] },
+  { id: 'природа', label: 'Природа и прогулки', emoji: '🌿', synonyms: ['природа', 'прогулки', 'хайкинг', 'парк', 'поход', 'скалолазание'] },
+];
+
+const ZONE_BY_ID = Object.fromEntries(ZONES.map(z => [z.id, z]));
 
 function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages, vibes}){
   let res = ITEMS.slice();
@@ -319,9 +326,10 @@ function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages, vibes}
   if(chips.length){
     res = res.filter(it => {
       const categories = (it.categories||[]).map(x => String(x).toLowerCase());
-      return chips.some(tag => {
-        const t = String(tag).toLowerCase();
-        const synonyms = CHIP_SYNONYMS[t] || [t];
+      return chips.some(zoneId => {
+        const zone = ZONE_BY_ID[String(zoneId).toLowerCase()];
+        if (!zone) return false;
+        const synonyms = [zone.id, ...(zone.synonyms || [])].map(s => String(s).toLowerCase());
         return categories.some(c => synonyms.some(s => c.includes(s)));
       });
     });
@@ -855,23 +863,13 @@ function buildCategoryChips() {
   const container = document.getElementById('categoryChips');
   if (!container) return;
   container.innerHTML = '';
-  const counter = new Map();
-  ITEMS.forEach(it => (it.categories || []).forEach(c => {
-    const key = String(c).toLowerCase();
-    counter.set(key, (counter.get(key) || 0) + 1);
-  }));
-  const sorted = [...counter.entries()].sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-  const emojiMap = new Map([
-    ['социум','✨'], ['спорт','🔥'], ['игры','🎮'], ['творчество','🎨'], ['языки','🗣️'], ['программирование','👾'], ['танцы','💃']
-  ]);
+  // Build normalized zone chips
   const frag = document.createDocumentFragment();
-  sorted.forEach(([cat]) => {
+  ZONES.forEach(z => {
     const btn = document.createElement('button');
     btn.className = 'chip';
-    btn.setAttribute('data-tag', cat);
-    const emoji = emojiMap.get(cat) || '✨';
-    const label = cat.charAt(0).toUpperCase() + cat.slice(1);
-    btn.textContent = `${emoji} ${label}`;
+    btn.setAttribute('data-tag', z.id);
+    btn.textContent = `${z.emoji} ${z.label}`;
     frag.appendChild(btn);
   });
   container.appendChild(frag);
