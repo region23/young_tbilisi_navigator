@@ -538,6 +538,46 @@ async function tryIpGeolocation() {
     return null;
   }
 }
+
+async function getPositionRobust() {
+  try {
+    return await new Promise((resolve, reject) =>
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: false,
+        timeout: 30000,
+        maximumAge: 0
+      })
+    );
+  } catch (e) {
+    if (e && typeof e.code === 'number' && e.code === e.PERMISSION_DENIED) throw e;
+  }
+  try {
+    return await new Promise((resolve, reject) =>
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 30000,
+        maximumAge: 0
+      })
+    );
+  } catch (_) {}
+  return await new Promise((resolve, reject) => {
+    const id = navigator.geolocation.watchPosition(
+      p => {
+        navigator.geolocation.clearWatch(id);
+        resolve(p);
+      },
+      err => {
+        navigator.geolocation.clearWatch(id);
+        reject(err);
+      },
+      { enableHighAccuracy: true, maximumAge: 0 }
+    );
+    setTimeout(() => {
+      navigator.geolocation.clearWatch(id);
+      reject(new Error('watch timeout'));
+    }, 45000);
+  });
+}
 document.getElementById('geoBtn').addEventListener('click', async (e)=>{
   const btn = e.currentTarget;
   btn.classList.add('loading');
@@ -581,13 +621,7 @@ document.getElementById('geoBtn').addEventListener('click', async (e)=>{
     return;
   }
   try {
-    const pos = await new Promise((resolve, reject) =>
-      navigator.geolocation.getCurrentPosition(resolve, reject, {
-        enableHighAccuracy: false,
-        timeout: 15000,
-        maximumAge: 300000
-      })
-    );
+    const pos = await getPositionRobust();
     userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
     distanceCache.clear();
     btn.classList.remove('loading');
@@ -628,7 +662,7 @@ document.getElementById('geoBtn').addEventListener('click', async (e)=>{
     let msg = 'Не получилось определить местоположение.';
     if (err && typeof err.code === 'number') {
       if (err.code === err.PERMISSION_DENIED) msg = 'Доступ к геолокации запрещён. Разреши доступ в настройках сайта/браузера.';
-      else if (err.code === err.POSITION_UNAVAILABLE) msg = 'Не удалось определить позицию. На десктопах помогает включить Wi‑Fi (даже при Ethernet) и отключить VPN.';
+      else if (err.code === err.POSITION_UNAVAILABLE) msg = 'Система не смогла получить координаты (на iOS/macOS это часто kCLErrorLocationUnknown). Включи Wi‑Fi (даже при Ethernet), отключи VPN/Private Relay, включи точную геопозицию и подожди минуту.';
       else if (err.code === err.TIMEOUT) msg = 'Геолокация не успела определить позицию. Попробуй ещё раз.';
     }
     alert(msg);
