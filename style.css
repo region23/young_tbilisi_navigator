@@ -1,16 +1,16 @@
 
 :root { 
   --bg: #0f0e17;
-  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-gradient: linear-gradient(135deg, #e9d5ca 0%, #c7bfff 100%);
   --card: #1a1825;
   --card-hover: #252236;
   --text: #fffffe;
   --text-muted: #a7a9be;
-  --accent: #ff6e6c;
-  --accent2: #67568c;
-  --accent3: #fbdd74;
+  --accent: #ff8fab; /* blush */
+  --accent2: #95f2d9; /* mint */
+  --accent3: #ffd6a5; /* apricot */
   --border: #2a2741;
-  --shadow: rgba(103, 86, 140, 0.3);
+  --shadow: rgba(149, 242, 217, 0.25);
 }
 
 /* Light theme overrides */
@@ -29,32 +29,32 @@
 }
 /* Rebel mode tokens - more vibrant and Gen Z */
 :root.rebel {
-  --bg: #0a0a0f;
-  --bg-gradient: radial-gradient(60% 60% at 50% 50%, rgba(255,105,180,0.15) 0%, rgba(10,10,15,0) 60%), radial-gradient(40% 40% at 20% 80%, rgba(0,255,127,0.18) 0%, rgba(10,10,15,0) 60%), radial-gradient(40% 40% at 80% 20%, rgba(255,215,0,0.16) 0%, rgba(10,10,15,0) 60%);
+  --bg: #0b0a10;
+  --bg-gradient: radial-gradient(60% 60% at 50% 50%, rgba(255, 183, 197, 0.14) 0%, rgba(11,10,16,0) 60%), radial-gradient(40% 40% at 20% 80%, rgba(149, 242, 217, 0.14) 0%, rgba(11,10,16,0) 60%), radial-gradient(40% 40% at 80% 20%, rgba(255, 214, 165, 0.12) 0%, rgba(11,10,16,0) 60%);
   --card: #151520;
   --card-hover: #1a1a30;
   --text: #f0f0ff;
   --text-muted: #b0b0d0;
-  --accent: #ff69b4;
-  --accent2: #00ff7f;
-  --accent3: #ffd700;
+  --accent: #ff8fab; /* blush */
+  --accent2: #95f2d9; /* mint */
+  --accent3: #ffd6a5; /* apricot */
   --border: #2a2a40;
-  --shadow: rgba(255, 105, 180, 0.3);
+  --shadow: rgba(255, 183, 197, 0.28);
 }
 
 /* Rebel mode tokens for light theme - more playful */
 :root[data-theme="light"].rebel {
-  --bg: #fff5fc;
-  --bg-gradient: radial-gradient(60% 60% at 50% 50%, rgba(255,105,180,0.08) 0%, rgba(255,255,255,0) 60%), radial-gradient(40% 40% at 20% 80%, rgba(0,255,127,0.06) 0%, rgba(255,255,255,0) 60%), radial-gradient(40% 40% at 80% 20%, rgba(255,215,0,0.1) 0%, rgba(255,255,255,0) 60%);
+  --bg: #fff7f3;
+  --bg-gradient: radial-gradient(60% 60% at 50% 50%, rgba(255, 183, 197, 0.12) 0%, rgba(255,255,255,0) 60%), radial-gradient(40% 40% at 20% 80%, rgba(149, 242, 217, 0.1) 0%, rgba(255,255,255,0) 60%), radial-gradient(40% 40% at 80% 20%, rgba(255, 214, 165, 0.12) 0%, rgba(255,255,255,0) 60%);
   --card: #ffffff;
   --card-hover: #f8f4ff;
   --text: #2a1a30;
   --text-muted: #6a5a70;
-  --accent: #ff1493;
-  --accent2: #00c851;
-  --accent3: #ffab00;
+  --accent: #ff8fab;
+  --accent2: #52d1bd;
+  --accent3: #ffcb9a;
   --border: #e8d8f0;
-  --shadow: rgba(255, 20, 147, 0.15);
+  --shadow: rgba(255, 183, 197, 0.15);
 }
 
 * {
@@ -195,7 +195,7 @@ h1 {
   margin: 0 0 12px;
   font-size: clamp(32px, 5vw, 48px);
   font-weight: 800;
-  background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+  background: linear-gradient(135deg, #e9d5ca, #c7bfff, #ff8fab);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -225,6 +225,7 @@ h1 {
 
 @media (prefers-reduced-motion: reduce) {
   .rebel h1 { animation: none; }
+  * { animation: none !important; transition: none !important; }
 }
 
 @keyframes gradient {
@@ -765,6 +766,13 @@ footer {
 
 footer small {
   opacity: 0.7;
+}
+
+.safety-note {
+  display: block;
+  margin-top: 8px;
+  opacity: 0.8;
+  font-size: 12px;
 }
 
 .footer-actions {

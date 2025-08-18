@@ -15,8 +15,8 @@ let userStats = {
 
 const ACHIEVEMENTS = {
   'explorer': { name: 'Исследователь', desc: 'Посмотрел 10+ мест', emoji: '🔍', threshold: 10 },
-  'social': { name: 'Социал-бабочка', desc: 'Изучил места для знакомств', emoji: '🦋', categories: ['социум'] },
-  'creative': { name: 'Креативщик', desc: 'Нашел свой творческий путь', emoji: '🎨', categories: ['творчество'] },
+  'social': { name: 'Общительный', desc: 'Изучил места для знакомств', emoji: '🦋', categories: ['социум'] },
+  'creative': { name: 'Креативный', desc: 'Нашел творческие активности', emoji: '🎨', categories: ['творчество'] },
   'gamer': { name: 'Геймер', desc: 'Обнаружил игровые тусовки', emoji: '🎮', categories: ['игры'] },
   'polyglot': { name: 'Полиглот', desc: 'Заинтересовался языками', emoji: '🗣️', categories: ['языки'] },
   'athlete': { name: 'Атлет', desc: 'Выбрал активный образ жизни', emoji: '💪', categories: ['спорт'] },
@@ -83,9 +83,16 @@ function initTheme() {
 async function loadItems() {
   const res = await fetch('data/items.json');
   const data = await res.json();
-  // ensure suitable for 13-18 year olds
-  ITEMS = data.filter(it => it.age && it.age.max >= 13);
-  console.log(`Loaded ${ITEMS.length} items from ${data.length} total`);
+  // Teen-safe: include only activities overlapping with 13–18 or explicitly tagged as teen
+  ITEMS = data.filter(it => {
+    const age = it.age || {};
+    const min = Number.isFinite(age.min) ? age.min : null;
+    const max = Number.isFinite(age.max) ? age.max : null;
+    const overlapsTeen = (min === null && max === null) ? false : ((min ?? -Infinity) <= 18 && (max ?? Infinity) >= 13);
+    const teenTag = (it.categories || []).some(c => /подрост|teen|тин/i.test(String(c)));
+    return overlapsTeen || teenTag;
+  });
+  console.log(`Loaded ${ITEMS.length} teen-friendly from ${data.length} total`);
   render();
   
   // Initialize map after Yandex API loads (guard if API failed to load)
@@ -94,6 +101,11 @@ async function loadItems() {
   } else {
     initMapWhenReady();
   }
+
+  // Dispatch custom event so dynamic chips can be built
+  try {
+    document.dispatchEvent(new Event('itemsLoaded'));
+  } catch (_) {}
 }
 
 function setupMap() {
@@ -137,6 +149,10 @@ function render(){
   const onlineLabelEl = document.querySelector('.switch-label');
   if (onlineLabelEl) onlineLabelEl.classList.toggle('on', filters.onlineOnly);
   const items = applyFilters(filters);
+  const chipsContainer = document.getElementById('categoryChips');
+  if (chipsContainer && !chipsContainer.children.length) {
+    try { buildCategoryChips(); } catch (_) {}
+  }
   list.innerHTML = `<div class="list-meta" id="listMeta"></div>`;
   const frag = document.createDocumentFragment();
   const metaEl = document.getElementById('listMeta');
@@ -156,12 +172,12 @@ function render(){
     div.innerHTML = `
       <div class="card-header">
         <strong>${it.title}</strong>
-        ${index < 3 ? '<span class="hot-badge">🔥 HOT</span>' : ''}
+        ${index < 3 ? '<span class="hot-badge">🔥 Популярно</span>' : ''}
       </div>
       <div class="card-description">${it.blurb}</div>
       <div class="badges">
         <span class="badge ${it.type==='online'?'badge-online':'badge-offline'}">
-          ${it.type==='online'?'🌐 Онлайн':'📍 Оффлайн'}
+          ${it.type==='online'?'🌐 Онлайн':'📍 Офлайн'}
         </span>
         <span class="badge badge-age">🎂 ${it.age.min}–${it.age.max} лет</span>
         ${renderLanguages(it.languages)}
@@ -276,10 +292,18 @@ function getFilters(){
 
 // Mapping of activity categories to personality vibes
 const VIBE_MAPPING = {
-  'introvert': ['программирование', 'it', 'искусство', 'студия', 'рисование', 'творчество', 'minecraft', 'roblox', 'чтение', 'музыка', 'шахматы'],
-  'extrovert': ['танцы', 'театр', 'хип-хоп', 'концерт', 'фестиваль', 'публичные', 'команда', 'групповые', 'вечеринка', 'социум', 'общение'],
-  'chill': ['йога', 'медитация', 'релакс', 'спа', 'массаж', 'природа', 'кафе', 'чай', 'прогулки', 'здоровье'],
+  'introvert': ['программирование', 'it', 'искусство', 'студия', 'рисование', 'творчество', 'minecraft', 'roblox', 'чтение', 'музыка', 'шахматы', 'манга', 'аниме'],
+  'extrovert': ['танцы', 'театр', 'хип-хоп', 'концерт', 'фестиваль', 'публичные', 'команда', 'групповые', 'вечеринка', 'социум', 'общение', 'косплей', 'alt'],
+  'chill': ['йога', 'медитация', 'релакс', 'спа', 'массаж', 'природа', 'кафе', 'чай', 'прогулки', 'здоровье', 'лоуфай', 'lofi'],
   'active': ['спорт', 'фитнес', 'плавание', 'мма', 'бег', 'велосипед', 'активные', 'экстрим', 'туризм', 'games', 'игры']
+};
+
+// Synonyms for tag-chip filtering (case-insensitive)
+const CHIP_SYNONYMS = {
+  'аниме': ['аниме', 'anime'],
+  'косплей': ['косплей', 'cosplay'],
+  'манга': ['манга', 'manga'],
+  'alt': ['alt', 'альт', 'альтернатив']
 };
 
 function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages, vibes}){
@@ -293,7 +317,14 @@ function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages, vibes}
     res = res.filter(it => likedIds.has(it.id));
   }
   if(chips.length){
-    res = res.filter(it => chips.some(tag => (it.categories||[]).some(c=>c.includes(tag))));
+    res = res.filter(it => {
+      const categories = (it.categories||[]).map(x => String(x).toLowerCase());
+      return chips.some(tag => {
+        const t = String(tag).toLowerCase();
+        const synonyms = CHIP_SYNONYMS[t] || [t];
+        return categories.some(c => synonyms.some(s => c.includes(s)));
+      });
+    });
   }
   if(languages.length){
     res = res.filter(it => languages.some(lang => (it.languages||[]).includes(lang)));
@@ -340,7 +371,7 @@ function refreshPins(filters, items = null) {
           <div style="margin: 8px 0;">
             ${renderLanguages(it.languages)}
             <span class="badge ${it.type === 'online' ? 'badge-online' : 'badge-offline'}">
-              ${it.type === 'online' ? '🌐 Онлайн' : '📍 Оффлайн'}
+              ${it.type === 'online' ? '🌐 Онлайн' : '📍 Офлайн'}
             </span>
           </div>
           <div style="margin: 4px 0; color: #666;">
@@ -713,10 +744,10 @@ function initChipHandlers() {
         // Show encouraging message
         const vibe = e.target.dataset.vibe;
         const messages = {
-          'introvert': 'Классный выбор! Нашли места для спокойного общения 🌙',
-          'extrovert': 'Отлично! Покажем активные тусовки 🌟',
-          'chill': 'Класс! Найдем места для релакса 🌊',
-          'active': 'Поняла! Покажем все энергичные места ⚡'
+          'introvert': 'Подобрали спокойные варианты 🌙',
+          'extrovert': 'Покажем активные варианты 🌟',
+          'chill': 'Больше спокойных мест 🌊',
+          'active': 'Больше движения ⚡'
         };
         
         if (messages[vibe]) {
@@ -781,11 +812,15 @@ document.addEventListener('DOMContentLoaded', () => {
     updateFavoritesCounter();
     initializeFavoritesButton();
   }, 200);
+  // Build dynamic category chips after items load
+  document.addEventListener('itemsLoaded', () => {
+    buildCategoryChips();
+  });
   
   // Show welcome message for first-time users
   setTimeout(() => {
     if (userStats.placesViewed === 0) {
-      showMotivationalMessage('Привет, Маша! Давай найдем тебе что-то крутое! 🎉');
+      showMotivationalMessage('Привет! Посмотрим, что тебе понравится ✨');
     }
   }, 2000);
   
@@ -816,6 +851,32 @@ function updateListMetaVisible() {
   metaEl.textContent = `Показано ${visible} из ${all}`;
 }
 
+function buildCategoryChips() {
+  const container = document.getElementById('categoryChips');
+  if (!container) return;
+  container.innerHTML = '';
+  const counter = new Map();
+  ITEMS.forEach(it => (it.categories || []).forEach(c => {
+    const key = String(c).toLowerCase();
+    counter.set(key, (counter.get(key) || 0) + 1);
+  }));
+  const sorted = [...counter.entries()].sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  const emojiMap = new Map([
+    ['социум','✨'], ['спорт','🔥'], ['игры','🎮'], ['творчество','🎨'], ['языки','🗣️'], ['программирование','👾'], ['танцы','💃']
+  ]);
+  const frag = document.createDocumentFragment();
+  sorted.forEach(([cat]) => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.setAttribute('data-tag', cat);
+    const emoji = emojiMap.get(cat) || '✨';
+    const label = cat.charAt(0).toUpperCase() + cat.slice(1);
+    btn.textContent = `${emoji} ${label}`;
+    frag.appendChild(btn);
+  });
+  container.appendChild(frag);
+}
+
 function applyRebelMode(isOn) {
   const root = document.documentElement;
   if (isOn) {
@@ -824,7 +885,11 @@ function applyRebelMode(isOn) {
     root.classList.remove('rebel');
   }
   const btn = document.getElementById('rebelToggle');
-  if (btn) btn.setAttribute('aria-pressed', String(!!isOn));
+  if (btn) {
+    btn.setAttribute('aria-pressed', String(!!isOn));
+    const span = btn.querySelector('span');
+    if (span) span.textContent = isOn ? 'ALT MODE' : 'ANIME';
+  }
 }
 
 function initRebelMode() {
@@ -852,12 +917,11 @@ function updateMicrocopyForRebel(isOn) {
   const titleEl = document.querySelector('header h1');
   const pEl = document.querySelector('header p');
   if (!titleEl || !pEl) return;
+  titleEl.textContent = 'Найди друзей по интересам в Тбилиси ✨';
   if (isOn) {
-    titleEl.innerHTML = 'Время найти свою банду! <span style="font-size: 0.8em;">🔥</span>';
-    pEl.innerHTML = 'Вайб чекер активирован! Здесь живут самые крутые тусовки Тбилиси. Выбирай то, что цепляет, добавляй в лайки и иди знакомиться с классными людьми! ✨';
+    pEl.textContent = 'Альт‑режим включён. Выбирай, что нравится — сохраняй избранное и знакомься.';
   } else {
-    titleEl.innerHTML = 'Время найти свою банду! <span style="font-size: 0.8em;">🔥</span>';
-    pEl.innerHTML = 'Здесь живут самые крутые тусовки Тбилиси! Выбирай то, что цепляет, добавляй в лайки и иди знакомиться с классными людьми! 💫';
+    pEl.textContent = 'Выбирай, что нравится. Сохраняй избранное и знакомься в безопасных местах.';
   }
 }
 
@@ -928,8 +992,8 @@ function showAchievementPopup(achievement) {
 
 function getFavoritesCount() {
   try {
-    const favorites = localStorage.getItem('favorites');
-    return favorites ? JSON.parse(favorites).length : 0;
+    const arr = JSON.parse(localStorage.getItem('liked_ids') || '[]');
+    return Array.isArray(arr) ? arr.length : 0;
   } catch {
     return 0;
   }
