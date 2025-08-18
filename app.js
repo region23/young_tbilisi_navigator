@@ -92,6 +92,14 @@ async function loadItems() {
     const teenTag = (it.categories || []).some(c => /подрост|teen|тин/i.test(String(c)));
     return overlapsTeen || teenTag;
   });
+  // Precompute normalized fields for faster filtering
+  ITEMS.forEach(it => {
+    const normCategories = (it.categories || []).map(x => String(x).toLowerCase());
+    it._normCategories = normCategories;
+    const title = it.title ? String(it.title) : '';
+    const blurb = it.blurb ? String(it.blurb) : '';
+    it._normText = [title, blurb, ...normCategories].filter(Boolean).join(' ').toLowerCase();
+  });
   console.log(`Loaded ${ITEMS.length} teen-friendly from ${data.length} total`);
   render();
   
@@ -312,6 +320,17 @@ const ZONES = [
 ];
 
 const ZONE_BY_ID = Object.fromEntries(ZONES.map(z => [z.id, z]));
+// Precomputed lowercased lookups to avoid repeated toLowerCase and joins during filtering
+const VIBE_KEYWORDS_LOWER = Object.fromEntries(
+  Object.entries(VIBE_MAPPING).map(([k, arr]) => [k, arr.map(s => String(s).toLowerCase())])
+);
+const ZONE_SYNONYMS_LOWER = Object.fromEntries(
+  ZONES.map(z => {
+    const idLower = String(z.id).toLowerCase();
+    const synonymsLower = [idLower, ...(z.synonyms || [])].map(s => String(s).toLowerCase());
+    return [idLower, synonymsLower];
+  })
+);
 
 function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages, vibes}){
   let res = ITEMS.slice();
@@ -325,11 +344,11 @@ function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages, vibes}
   }
   if(chips.length){
     res = res.filter(it => {
-      const categories = (it.categories||[]).map(x => String(x).toLowerCase());
+      const categories = it._normCategories || (it.categories || []).map(x => String(x).toLowerCase());
       return chips.some(zoneId => {
-        const zone = ZONE_BY_ID[String(zoneId).toLowerCase()];
-        if (!zone) return false;
-        const synonyms = [zone.id, ...(zone.synonyms || [])].map(s => String(s).toLowerCase());
+        const zoneIdLower = String(zoneId).toLowerCase();
+        const synonyms = ZONE_SYNONYMS_LOWER[zoneIdLower];
+        if (!synonyms) return false;
         return categories.some(c => synonyms.some(s => c.includes(s)));
       });
     });
@@ -340,10 +359,11 @@ function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages, vibes}
   if(vibes.length){
     console.log('Filtering by vibes:', vibes);
     res = res.filter(it => {
-      const itemCategories = (it.categories||[]).concat([it.title, it.blurb]).join(' ').toLowerCase();
-      const matches = vibes.some(vibe => 
-        VIBE_MAPPING[vibe].some(keyword => itemCategories.includes(keyword.toLowerCase()))
-      );
+      const text = it._normText || ((it.categories || []).concat([it.title, it.blurb]).join(' ').toLowerCase());
+      const matches = vibes.some(vibe => {
+        const keywords = VIBE_KEYWORDS_LOWER[vibe] || [];
+        return keywords.some(keyword => text.includes(keyword));
+      });
       return matches;
     });
     console.log('Items after vibe filter:', res.length);
