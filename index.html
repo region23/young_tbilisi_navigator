@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Твой гид по Тбилиси | Секции и кружки для подростков 🚀</title>
+  <title>Маша, твоя тусовка ждет! | Найди друзей в Тбилиси 🦄✨</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://api-maps.yandex.ru" crossorigin>
@@ -29,8 +29,8 @@
       <span class="slider"></span>
     </label>
   </div>
-  <h1>Найди свою тусовку в Тбилиси</h1>
-  <p>Крутые секции, кружки и онлайн-сообщества для подростков 13-18 лет. Выбирай что нравится и сохраняй в избранное!</p>
+  <h1>Время найти свою банду! 🔥</h1>
+  <p>Здесь живут самые крутые тусовки Тбилиси! Выбирай то, что цепляет, добавляй в лайки и иди знакомиться с классными людьми! 💫</p>
 </header>
 
 <section id="filters">
@@ -40,23 +40,32 @@
       <input type="checkbox" id="onlineToggle">
       <span class="slider"></span>
     </label>
-    <span class="switch-label" title="Показывать только онлайн">🌐 Онлайн</span>
+    <span class="switch-label" title="Показывать только онлайн">📱 Удаленка</span>
     <button class="chip favorites-chip" id="favoritesChip" title="Показать только избранное">
-      ♡ Избранное <span id="favoritesCount">(0)</span>
+      💖 Мои лайки <span id="favoritesCount">(0)</span>
     </button>
     <div class="range-control">
-      <label>📏 Радиус: <span id="distLabel">весь город</span></label>
+      <label>📍 Рядом со мной: <span id="distLabel">везде</span></label>
       <input id="distance" type="range" min="0" max="15" step="1" value="0">
     </div>
   </div>
   <div class="chips">
-    <button class="chip" data-tag="социум">🤝 Новые друзья</button>
-    <button class="chip" data-tag="спорт">⚡ Спорт и движение</button>
-    <button class="chip" data-tag="игры">🎮 Игры и киберспорт</button>
-    <button class="chip" data-tag="творчество">🎨 Творчество</button>
-    <button class="chip" data-tag="языки">💬 Языки</button>
-    <button class="chip" data-tag="программирование">💻 Кодинг</button>
-    <button class="chip" data-tag="танцы">🕺 Танцы</button>
+    <button class="chip" data-tag="социум">✨ Найти банду</button>
+    <button class="chip" data-tag="спорт">🔥 Движ и спорт</button>
+    <button class="chip" data-tag="игры">🎮 Гейминг</button>
+    <button class="chip" data-tag="творчество">🎨 Креатив</button>
+    <button class="chip" data-tag="языки">🗣️ Болтология</button>
+    <button class="chip" data-tag="программирование">👾 IT-магия</button>
+    <button class="chip" data-tag="танцы">💃 Танцульки</button>
+  </div>
+  <div class="filter-section">
+    <label class="filter-label">По вайбу:</label>
+    <div class="chips">
+      <button class="chip personality-chip" data-vibe="introvert">🌙 Для скромняшек</button>
+      <button class="chip personality-chip" data-vibe="extrovert">🌟 Для общительных</button>
+      <button class="chip personality-chip" data-vibe="chill">🌊 Чил формат</button>
+      <button class="chip personality-chip" data-vibe="active">⚡ Активные вибы</button>
+    </div>
   </div>
   <div class="filter-section">
     <label class="filter-label">По языкам:</label>
@@ -74,7 +83,8 @@
 </main>
 
 <footer>
-  <small>Made with ❤️ for Masha and the teens of Tbilisi • 2025</small>
+  <small>Сделано с 💜 специально для Маши и всех крутых тинов Тбилиси • 2025</small>
+  <div class="achievement-display" id="achievementDisplay" style="margin-top: 15px; text-align: center; opacity: 0.7; font-size: 12px;"></div>
   <div class="footer-actions">
     <a
       class="chip favorites-chip"
@@ -82,7 +92,7 @@
       target="_blank"
       rel="noopener noreferrer"
     >
-      ➕ Добавить место
+      ✨ Предложить тусовку
     </a>
   </div>
 </footer>

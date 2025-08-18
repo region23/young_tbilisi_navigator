@@ -5,6 +5,25 @@ let favoritesFilterActive = false; // Track favorites filter state
 const THEME_KEY = 'theme';
 const REBEL_KEY = 'rebel_mode';
 
+// Gamification system
+let userStats = {
+  placesViewed: 0,
+  categoriesExplored: new Set(),
+  achievementsUnlocked: new Set(),
+  sessionStartTime: Date.now()
+};
+
+const ACHIEVEMENTS = {
+  'explorer': { name: 'Исследователь', desc: 'Посмотрел 10+ мест', emoji: '🔍', threshold: 10 },
+  'social': { name: 'Социал-бабочка', desc: 'Изучил места для знакомств', emoji: '🦋', categories: ['социум'] },
+  'creative': { name: 'Креативщик', desc: 'Нашел свой творческий путь', emoji: '🎨', categories: ['творчество'] },
+  'gamer': { name: 'Геймер', desc: 'Обнаружил игровые тусовки', emoji: '🎮', categories: ['игры'] },
+  'polyglot': { name: 'Полиглот', desc: 'Заинтересовался языками', emoji: '🗣️', categories: ['языки'] },
+  'athlete': { name: 'Атлет', desc: 'Выбрал активный образ жизни', emoji: '💪', categories: ['спорт'] },
+  'first_like': { name: 'Первый лайк', desc: 'Добавил место в избранное', emoji: '💖', threshold: 1 },
+  'collector': { name: 'Коллекционер', desc: 'Собрал 5+ лайков', emoji: '⭐', threshold: 5 }
+};
+
 // Debounce helper to avoid excessive re-renders on rapid inputs
 const debounce = (fn, wait = 150) => {
   let timeoutId;
@@ -64,8 +83,9 @@ function initTheme() {
 async function loadItems() {
   const res = await fetch('data/items.json');
   const data = await res.json();
-  // ensure only 13+
-  ITEMS = data.filter(it => it.age && it.age.min <= 13);
+  // ensure suitable for 13-18 year olds
+  ITEMS = data.filter(it => it.age && it.age.max >= 13);
+  console.log(`Loaded ${ITEMS.length} items from ${data.length} total`);
   render();
   
   // Initialize map after Yandex API loads (guard if API failed to load)
@@ -157,13 +177,20 @@ function render(){
     `;
     div.querySelector('.like').onclick = (e) => {
       e.stopPropagation();
+      const wasLiked = e.target.classList.contains('liked');
       toggleLike(it.id);
       e.target.classList.toggle('liked');
       e.target.textContent = e.target.classList.contains('liked') ? '♥' : '♡';
+      
+      // Track gamification
+      trackFavoriteToggle(!wasLiked);
     };
     
     // Add click handler to show location on map
     div.onclick = () => {
+      // Track place view for gamification
+      trackPlaceView(it);
+      
       if (it.coords) {
         showItemOnMap(it);
       }
@@ -242,12 +269,20 @@ function getFilters(){
   const dist = Number(document.getElementById('distance').value);
   const chips = [...document.querySelectorAll('.chip.active[data-tag]')].map(x=>x.dataset.tag);
   const languages = [...document.querySelectorAll('.chip.active[data-language]')].map(x=>x.dataset.language);
+  const vibes = [...document.querySelectorAll('.personality-chip.active[data-vibe]')].map(x=>x.dataset.vibe);
   
-  
-  return { onlineOnly, favoritesOnly, dist, chips, languages };
+  return { onlineOnly, favoritesOnly, dist, chips, languages, vibes };
 }
 
-function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages}){
+// Mapping of activity categories to personality vibes
+const VIBE_MAPPING = {
+  'introvert': ['программирование', 'it', 'искусство', 'студия', 'рисование', 'творчество', 'minecraft', 'roblox', 'чтение', 'музыка', 'шахматы'],
+  'extrovert': ['танцы', 'театр', 'хип-хоп', 'концерт', 'фестиваль', 'публичные', 'команда', 'групповые', 'вечеринка', 'социум', 'общение'],
+  'chill': ['йога', 'медитация', 'релакс', 'спа', 'массаж', 'природа', 'кафе', 'чай', 'прогулки', 'здоровье'],
+  'active': ['спорт', 'фитнес', 'плавание', 'мма', 'бег', 'велосипед', 'активные', 'экстрим', 'туризм', 'games', 'игры']
+};
+
+function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages, vibes}){
   let res = ITEMS.slice();
   
   if(onlineOnly){
@@ -262,6 +297,17 @@ function applyFilters({onlineOnly, favoritesOnly, dist, chips, languages}){
   }
   if(languages.length){
     res = res.filter(it => languages.some(lang => (it.languages||[]).includes(lang)));
+  }
+  if(vibes.length){
+    console.log('Filtering by vibes:', vibes);
+    res = res.filter(it => {
+      const itemCategories = (it.categories||[]).concat([it.title, it.blurb]).join(' ').toLowerCase();
+      const matches = vibes.some(vibe => 
+        VIBE_MAPPING[vibe].some(keyword => itemCategories.includes(keyword.toLowerCase()))
+      );
+      return matches;
+    });
+    console.log('Items after vibe filter:', res.length);
   }
   if(userPos && dist>0){
     res = res.filter(it => it.coords && computeDistance(it) <= dist);
@@ -549,12 +595,6 @@ document.getElementById('geoBtn').addEventListener('click', async (e)=>{
     alert(msg);
   }
 });
-document.querySelectorAll('.chip').forEach(btn=>{
-  btn.addEventListener('click', ()=>{ 
-    btn.classList.toggle('active'); 
-    render(); 
-  });
-});
 
 // Add search functionality
 function addSearchBar() {
@@ -647,18 +687,113 @@ function initMapWhenReady() {
   }, 200);
 }
 
-// Initialize
-loadItems();
+// Initialize map readiness polling
 initMapWhenReady();
-setTimeout(addSearchBar, 100);
-setTimeout(() => {
-  updateFavoritesCounter();
-  initializeFavoritesButton();
-}, 200);
+
+// Add all chip handlers and other interactive elements
+function initChipHandlers() {
+  document.addEventListener('click', (e) => {
+    // Handle personality chips (vibe filters) - radio button behavior
+    if (e.target.matches('.personality-chip')) {
+      console.log('Personality chip clicked:', e.target.dataset.vibe);
+      
+      const wasActive = e.target.classList.contains('active');
+      
+      // If clicking an active button, deactivate it
+      if (wasActive) {
+        e.target.classList.remove('active');
+      } else {
+        // Deactivate all other personality chips first
+        document.querySelectorAll('.personality-chip.active').forEach(chip => {
+          chip.classList.remove('active');
+        });
+        // Activate the clicked one
+        e.target.classList.add('active');
+        
+        // Show encouraging message
+        const vibe = e.target.dataset.vibe;
+        const messages = {
+          'introvert': 'Классный выбор! Нашли места для спокойного общения 🌙',
+          'extrovert': 'Отлично! Покажем активные тусовки 🌟',
+          'chill': 'Класс! Найдем места для релакса 🌊',
+          'active': 'Поняла! Покажем все энергичные места ⚡'
+        };
+        
+        if (messages[vibe]) {
+          setTimeout(() => showMotivationalMessage(messages[vibe]), 300);
+        }
+      }
+      
+      // Re-render with new filters
+      render();
+    }
+    
+    // Handle category chips (data-tag)
+    if (e.target.matches('.chip[data-tag]') && !e.target.matches('.personality-chip')) {
+      e.target.classList.toggle('active');
+      render();
+      
+      // Track gamification
+      const category = e.target.dataset.tag;
+      if (category) {
+        userStats.categoriesExplored.add(category);
+        checkAchievements();
+      }
+    }
+    
+    // Handle language chips (data-language)
+    if (e.target.matches('.chip[data-language]')) {
+      e.target.classList.toggle('active');
+      render();
+    }
+  });
+  
+  // Add other control handlers
+  const onlineToggle = document.getElementById('onlineToggle');
+  if (onlineToggle) {
+    onlineToggle.addEventListener('change', () => {
+      render();
+    });
+  }
+  
+  const distanceSlider = document.getElementById('distance');
+  if (distanceSlider) {
+    distanceSlider.addEventListener('input', debounce(() => {
+      const val = Number(distanceSlider.value);
+      const label = document.getElementById('distLabel');
+      if (label) {
+        label.textContent = val === 0 ? 'везде' : `${val} км`;
+      }
+      render();
+    }, 300));
+  }
+}
 
 // Initialize theme as soon as possible
 document.addEventListener('DOMContentLoaded', initTheme);
 document.addEventListener('DOMContentLoaded', initRebelMode);
+document.addEventListener('DOMContentLoaded', initChipHandlers);
+document.addEventListener('DOMContentLoaded', () => {
+  // Load items and initialize UI
+  loadItems();
+  setTimeout(addSearchBar, 100);
+  setTimeout(() => {
+    updateFavoritesCounter();
+    initializeFavoritesButton();
+  }, 200);
+  
+  // Show welcome message for first-time users
+  setTimeout(() => {
+    if (userStats.placesViewed === 0) {
+      showMotivationalMessage('Привет, Маша! Давай найдем тебе что-то крутое! 🎉');
+    }
+  }, 2000);
+  
+  // Update achievement display periodically
+  setInterval(() => {
+    updateAchievementDisplay();
+  }, 5000);
+});
 
 
 function showItemOnMap(item) {
@@ -669,15 +804,8 @@ function showItemOnMap(item) {
     duration: 800
   });
   
-  // Находим соответствующий маркер и открываем его балун
-  setTimeout(() => {
-    clusterer.each((placemark) => {
-      if (placemark.properties.get('item') && placemark.properties.get('item').id === item.id) {
-        placemark.balloon.open();
-        return false; // прерываем цикл
-      }
-    });
-  }, 400);
+  // Auto-opening balloons disabled due to Yandex Maps API issues
+  // Users can click on pins to see details
 }
 
 function updateListMetaVisible() {
@@ -725,10 +853,135 @@ function updateMicrocopyForRebel(isOn) {
   const pEl = document.querySelector('header p');
   if (!titleEl || !pEl) return;
   if (isOn) {
-    titleEl.textContent = 'Найди свою тусовку. Или создай свою.';
-    pEl.textContent = 'Нормально — скучно. Лови места, комьюнити и движ, где можно быть собой, громко и без извинений.';
+    titleEl.innerHTML = 'Время найти свою банду! <span style="font-size: 0.8em;">🔥</span>';
+    pEl.innerHTML = 'Вайб чекер активирован! Здесь живут самые крутые тусовки Тбилиси. Выбирай то, что цепляет, добавляй в лайки и иди знакомиться с классными людьми! ✨';
   } else {
-    titleEl.textContent = 'Найди свою тусовку в Тбилиси';
-    pEl.textContent = 'Крутые секции, кружки и онлайн-сообщества для подростков 13-18 лет. Выбирай что нравится и сохраняй в избранное!';
+    titleEl.innerHTML = 'Время найти свою банду! <span style="font-size: 0.8em;">🔥</span>';
+    pEl.innerHTML = 'Здесь живут самые крутые тусовки Тбилиси! Выбирай то, что цепляет, добавляй в лайки и иди знакомиться с классными людьми! 💫';
   }
+}
+
+// Gamification functions
+function trackPlaceView(item) {
+  userStats.placesViewed++;
+  if (item.categories) {
+    item.categories.forEach(cat => userStats.categoriesExplored.add(cat));
+  }
+  
+  checkAchievements();
+  updateStatsDisplay();
+}
+
+function trackFavoriteToggle(isAdding) {
+  if (isAdding) {
+    checkAchievements();
+  }
+}
+
+function checkAchievements() {
+  const newAchievements = [];
+  
+  // Explorer achievement
+  if (userStats.placesViewed >= ACHIEVEMENTS.explorer.threshold && !userStats.achievementsUnlocked.has('explorer')) {
+    newAchievements.push('explorer');
+  }
+  
+  // Category-based achievements
+  ['social', 'creative', 'gamer', 'polyglot', 'athlete'].forEach(achievementKey => {
+    const achievement = ACHIEVEMENTS[achievementKey];
+    if (achievement.categories && !userStats.achievementsUnlocked.has(achievementKey)) {
+      const hasCategory = achievement.categories.some(cat => userStats.categoriesExplored.has(cat));
+      if (hasCategory) {
+        newAchievements.push(achievementKey);
+      }
+    }
+  });
+  
+  // Favorites-based achievements
+  const favCount = getFavoritesCount();
+  if (favCount >= 1 && !userStats.achievementsUnlocked.has('first_like')) {
+    newAchievements.push('first_like');
+  }
+  if (favCount >= 5 && !userStats.achievementsUnlocked.has('collector')) {
+    newAchievements.push('collector');
+  }
+  
+  newAchievements.forEach(key => {
+    userStats.achievementsUnlocked.add(key);
+    showAchievementPopup(ACHIEVEMENTS[key]);
+  });
+}
+
+function showAchievementPopup(achievement) {
+  const popup = document.createElement('div');
+  popup.className = 'achievement-popup';
+  popup.innerHTML = `${achievement.emoji} <strong>${achievement.name}</strong><br><small>${achievement.desc}</small>`;
+  
+  document.body.appendChild(popup);
+  
+  setTimeout(() => popup.classList.add('show'), 100);
+  setTimeout(() => {
+    popup.classList.remove('show');
+    setTimeout(() => popup.remove(), 500);
+  }, 3000);
+}
+
+function getFavoritesCount() {
+  try {
+    const favorites = localStorage.getItem('favorites');
+    return favorites ? JSON.parse(favorites).length : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function updateStatsDisplay() {
+  // Show motivational messages
+  const messages = [
+    'Продолжай в том же духе! 🌟',
+    'Ты на правильном пути! ✨',
+    'Скоро найдешь что-то классное! 🔥',
+    'Исследуй больше, найди свое! 💎',
+    'Каждое место - новая возможность! 🚀'
+  ];
+  
+  if (userStats.placesViewed > 0 && userStats.placesViewed % 5 === 0) {
+    showMotivationalMessage(messages[Math.floor(Math.random() * messages.length)]);
+  }
+}
+
+function showMotivationalMessage(message) {
+  const existing = document.querySelector('.motivation-badge');
+  if (existing) existing.remove();
+  
+  const badge = document.createElement('div');
+  badge.className = 'motivation-badge';
+  badge.textContent = message;
+  
+  document.body.appendChild(badge);
+  
+  setTimeout(() => badge.classList.add('show'), 100);
+  setTimeout(() => {
+    badge.classList.remove('show');
+    setTimeout(() => badge.remove(), 500);
+  }, 2500);
+}
+
+function updateAchievementDisplay() {
+  const display = document.getElementById('achievementDisplay');
+  if (!display) return;
+  
+  if (userStats.achievementsUnlocked.size === 0) {
+    display.innerHTML = 'Исследуй сайт чтобы получить первые достижения! 🎯';
+    return;
+  }
+  
+  const achievementBadges = Array.from(userStats.achievementsUnlocked)
+    .map(key => {
+      const achievement = ACHIEVEMENTS[key];
+      return `<span class="achievement-badge" title="${achievement.desc}">${achievement.emoji} ${achievement.name}</span>`;
+    })
+    .join('');
+  
+  display.innerHTML = `Твои достижения: ${achievementBadges}`;
 }
